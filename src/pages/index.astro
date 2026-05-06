@@ -18,8 +18,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       does the explaining.
     </p>
     <div class="hero-actions">
-      <a href="/research" class="btn btn-primary">Read my research →</a>
-      <a href="/portfolio" class="btn btn-ghost">See my work</a>
+      <a href={`${import.meta.env.BASE_URL}/research`.replace('//', '/')} class="btn btn-primary">Read my research →</a>
+<a href={`${import.meta.env.BASE_URL}/portfolio`.replace('//', '/')} class="btn btn-ghost">See my work</a>
     </div>
   </section>
 </BaseLayout>

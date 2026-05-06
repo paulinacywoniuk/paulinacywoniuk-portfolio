@@ -3,24 +3,26 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 // Note the path: ../../ because we're now two folders deep
 
+const base = import.meta.env.BASE_URL;
+
 const categories = [
   {
     title: 'VR & AR',
-    href: '/portfolio/vr-ar',
+    href: `${base}/portfolio/vr-ar`.replace('//', '/'),
     description: 'Immersive experiences and spatial interfaces.',
     color: 'var(--color-purple)',
     bgColor: 'var(--color-cyan)',
   },
   {
     title: 'Graphic Design',
-    href: '/portfolio/graphic-design',
+    href: `${base}/portfolio/graphic-design`.replace('//', '/'),
     description: 'Visual identity, illustration, and printed matter.',
     color: 'var(--color-text)',
     bgColor: 'var(--color-orange)',
   },
   {
     title: 'UI/UX Research',
-    href: '/portfolio/ui-ux-research',
+    href: `${base}/portfolio/ui-ux-research`.replace('//', '/'),
     description: 'User research, interaction studies, and prototyping.',
     color: 'white',
     bgColor: 'var(--color-blue)',

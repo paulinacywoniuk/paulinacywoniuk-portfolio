@@ -4,7 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
 <BaseLayout title="UI/UX Research — Paulina Cywoniuk">
   <section class="placeholder">
-    <a href="/portfolio" class="back-link">← Back to Portfolio</a>
+    <a href={`${import.meta.env.BASE_URL}/portfolio`.replace('//', '/')} class="back-link">← Back to Portfolio</a>
     <h1>UI/UX Research</h1>
     <p class="lead">Coming soon. This section will showcase immersive experiences and spatial interface projects.</p>
     <div class="upcoming">

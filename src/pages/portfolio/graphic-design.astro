@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Graphic Design — Paulina Cywoniuk">
+  <section class="placeholder">
+    <a href="/portfolio" class="back-link">← Back to Portfolio</a>
+    <h1>Graphic Design</h1>
+    <p class="lead">Coming soon. This section will showcase immersive experiences and spatial interface projects.</p>
+    <div class="upcoming">
+      <p><strong>Projects to add:</strong></p>
+      <ul>
+        <li>Echoes of Abandonment — VR narrative experience</li>
+        <li>[Your project here]</li>
+        <li>[Your project here]</li>
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .placeholder {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: clamp(3rem, 8vh, 5rem) var(--space-page);
+  }
+  .back-link {
+    display: inline-block;
+    margin-bottom: 2rem;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+  }
+  .back-link:hover { color: var(--color-purple); }
+  h1 {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    color: var(--color-purple);
+    margin-bottom: 1.5rem;
+  }
+  .lead {
+    font-size: 1.2rem;
+    color: var(--color-text-muted);
+    margin-bottom: 2rem;
+  }
+  .upcoming {
+    background-color: var(--color-cyan);
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+  }
+  .upcoming p { margin-bottom: 0.5rem; }
+  .upcoming ul { padding-left: 1.5rem; }
+  .upcoming li { margin-bottom: 0.5rem; }
+</style>

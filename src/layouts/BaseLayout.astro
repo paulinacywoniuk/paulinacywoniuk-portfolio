@@ -1,0 +1,35 @@
+---
+import '../styles/global.css';
+import Navbar from '../components/Navbar.astro';
+
+const { title = 'Paulina Cywoniuk', description = 'Designer & VR researcher' } = Astro.props;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+  </head>
+  <body>
+    <Navbar />
+    <main>
+      <slot />
+    </main>
+    <footer class="footer">
+      <p>© 2026 Paulina Cywoniuk. Built with Astro.</p>
+    </footer>
+
+    <style>
+      .footer {
+        max-width: var(--max-width);
+        margin: 4rem auto 2rem;
+        padding: 2rem var(--space-page);
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        font-size: 0.85rem;
+        color: var(--color-text-muted);
+      }
+    </style>
+  </body>
+</html>

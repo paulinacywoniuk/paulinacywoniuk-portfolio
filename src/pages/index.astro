@@ -1,106 +1,270 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout
   title="Paulina Cywoniuk — Designer & VR Researcher"
-  description="Portfolio and VR/HCI research of Paulina Cywoniuk."
+  description="Portfolio of Paulina Cywoniuk: designer, VR researcher, and game technology master's student."
 >
   <section class="hero">
-    <p class="hero-eyebrow">Designer · Researcher · VR/HCI</p>
-    <h1 class="hero-title">
-      I design <em>interfaces</em> that<br />
-      disappear into <span class="highlight">worlds</span>.
-    </h1>
-    <p class="hero-bio">
-      Based in Delft, I study how 3D objects become interfaces —
-      and how to design VR experiences where the world itself
-      does the explaining.
-    </p>
-    <div class="hero-actions">
-      <a href={`${import.meta.env.BASE_URL}/research`.replace('//', '/')} class="btn btn-primary">Read my research →</a>
-<a href={`${import.meta.env.BASE_URL}/portfolio`.replace('//', '/')} class="btn btn-ghost">See my work</a>
+
+    <!-- Vertical squiggle that weaves behind everything -->
+    <svg class="squiggle" viewBox="0 0 200 1000" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path
+        d="M 100 0
+           C 40 100, 160 200, 100 300
+           S 40 500, 100 600
+           S 160 800, 100 1000"
+        stroke="var(--color-lime)"
+        stroke-width="80"
+        stroke-linecap="round"
+        fill="none"
+        class="squiggle-path"
+      />
+    </svg>
+
+    <!-- The PORTFOLIO + signature composition -->
+    <div class="hero-stack">
+
+      <!-- PORTFOLIO wordmark -->
+      <img
+        src={`${base}/assets/portfolio-wordmark.svg`.replace('//', '/')}
+        alt="Portfolio"
+        class="wordmark"
+      />
+
+      <!-- "by Paulina Cywoniuk" — overlaps onto the bottom of PORTFOLIO -->
+      <div class="signature">
+        <span class="signature-by">by</span>
+        <img
+          src={`${base}/assets/paulina-name.svg`.replace('//', '/')}
+          alt="Paulina Cywoniuk"
+          class="signature-name"
+        />
+      </div>
+
     </div>
+
+    <!-- Scroll indicator -->
+    <a href="#below" class="scroll-indicator" aria-label="Scroll down">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M12 5 L12 19 M5 12 L12 19 L19 12"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </a>
+  </section>
+
+  <!-- Anchor for scroll. Real content goes here later. -->
+  <section id="below" class="below-hero">
+    <p class="below-placeholder">More sections coming soon…</p>
   </section>
 </BaseLayout>
 
 <style>
+  /* ============================================================
+     HERO LAYOUT
+     ============================================================ */
   .hero {
+    position: relative;
+    min-height: calc(100vh - 100px); /* viewport minus navbar */
     max-width: var(--max-width);
     margin: 0 auto;
-    padding: clamp(3rem, 10vh, 6rem) var(--space-page);
-  }
-
-  .hero-eyebrow {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--color-blue);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-bottom: 1.5rem;
-  }
-
-  .hero-title {
-    font-size: clamp(2.5rem, 7vw, 5rem);
-    max-width: 18ch;
-    margin-bottom: 2rem;
-  }
-
-  .hero-title em {
-    font-style: italic;
-    color: var(--color-purple);
-  }
-
-  .hero-title .highlight {
-    background-color: var(--color-lime);
-    padding: 0 0.2em;
-    border-radius: 4px;
-  }
-
-  .hero-bio {
-    font-size: 1.15rem;
-    max-width: 50ch;
-    color: var(--color-text-muted);
-    margin-bottom: 2.5rem;
-  }
-
-  .hero-actions {
+    padding: 2rem var(--space-page) 4rem;
     display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
   }
 
-  .btn {
-    padding: 0.85rem 1.5rem;
-    border-radius: 999px;
-    font-weight: 500;
-    font-size: 0.95rem;
-    transition: transform 0.15s ease, background-color 0.2s ease;
-    display: inline-block;
+  /* ============================================================
+     SQUIGGLE — vertical wave weaving behind everything
+     ============================================================ */
+  .squiggle {
+    position: absolute;
+    /* Position: centered horizontally, spans full height */
+    top: 0;
+    bottom: 0;
+    left: 80%;
+    transform: translateX(-50%);
+    height: 100%;
+    width: clamp(200px, 30vw, 400px); /* width of the squiggle's wave area */
+    z-index: 0; /* behind the text */
+    pointer-events: none;
   }
 
-  .btn:hover {
-    transform: translateY(-2px);
+  /* The SVG draw-in animation works by setting the path's
+     stroke-dasharray to its total length, then animating
+     stroke-dashoffset from that length down to 0. */
+  .squiggle-path {
+    stroke-dasharray: 3000;
+    stroke-dashoffset: 3000;
+    animation: draw-squiggle 2s ease-in-out 0.2s forwards;
   }
 
-  .btn-primary {
-    background-color: var(--color-purple);
-    color: white;
+  /* ============================================================
+     COMPOSITION STACK (wordmark + signature overlap)
+     ============================================================ */
+  .hero-stack {
+    position: relative;
+    z-index: 1; /* above the squiggle */
+    width: 100%;
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
-  .btn-primary:hover {
-    background-color: var(--color-blue);
-    color: white;
+  /* PORTFOLIO wordmark */
+  .wordmark {
+    width: 100%;
+    height: auto;
+    display: block;
+    animation: wordmark-in 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s both;
   }
 
-  .btn-ghost {
-    background-color: transparent;
-    color: var(--color-text);
-    border: 1.5px solid var(--color-text);
+  /* Signature: overlaps onto the bottom of PORTFOLIO with negative margin */
+  .signature {
+    /* This is the "crash" — pulls the signature up into the wordmark */
+    margin-top: clamp(-3rem, -6vw, -5rem);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    /* Slight rotation for the playful overlap feeling */
+    transform: rotate(-2deg);
+    animation: signature-in 0.7s ease-out 1.3s both;
   }
 
-  .btn-ghost:hover {
-    background-color: var(--color-text);
-    color: var(--color-bg);
+  .signature-by {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+    color: var(--color-blue);
+    /* Cursive-ish feel from Fraunces italic */
+  }
+
+  .signature-name {
+    /* Aim for ~1/3 the height of the wordmark.
+       Wordmark renders at viewport-relative size; we use clamp here too. */
+    height: clamp(2.5rem, 7vw, 30rem);
+    width: auto;
+    display: block;
+  }
+
+  /* ============================================================
+     SCROLL INDICATOR
+     ============================================================ */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32px;
+    height: 32px;
+    color: var(--color-purple);
+    opacity: 0;
+    animation:
+      scroll-fade 0.5s ease-out 2s forwards,
+      scroll-bounce 2s ease-in-out 2.5s infinite;
+    z-index: 2;
+  }
+
+  .scroll-indicator svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .scroll-indicator:hover {
+    color: var(--color-blue);
+  }
+
+  /* ============================================================
+     PLACEHOLDER below the hero
+     ============================================================ */
+  .below-hero {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 4rem var(--space-page);
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px dashed rgba(0, 0, 0, 0.1);
+  }
+
+  .below-placeholder {
+    color: var(--color-text-muted);
+    font-style: italic;
+  }
+
+  /* ============================================================
+     ANIMATIONS
+     ============================================================ */
+  @keyframes draw-squiggle {
+    to { stroke-dashoffset: 0; }
+  }
+
+  @keyframes wordmark-in {
+    0% {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes signature-in {
+    0% {
+      opacity: 0;
+      transform: rotate(-2deg) translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: rotate(-2deg) translateY(0);
+    }
+  }
+
+  @keyframes scroll-fade {
+    to { opacity: 0.7; }
+  }
+
+  @keyframes scroll-bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* Respect users who don't want animations */
+  @media (prefers-reduced-motion: reduce) {
+    .squiggle-path,
+    .wordmark,
+    .signature,
+    .scroll-indicator {
+      animation: none;
+      opacity: 1;
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* ============================================================
+     MOBILE TWEAKS
+     ============================================================ */
+  @media (max-width: 640px) {
+    .squiggle {
+      width: 60vw; /* squiggle takes more relative width on mobile */
+    }
+
+    .signature {
+      margin-top: clamp(-2rem, -5vw, -3rem);
+    }
   }
 </style>

@@ -30,7 +30,7 @@ const base = import.meta.env.BASE_URL;
 
       <!-- PORTFOLIO wordmark -->
       <img
-        src={`${base}/assets/portfolio-wordmark.svg`.replace('//', '/')}
+        src={`/assets/portfolio-wordmark.svg`.replace('//', '/')}
         alt="Portfolio"
         class="wordmark"
       />
@@ -39,7 +39,7 @@ const base = import.meta.env.BASE_URL;
       <div class="signature">
         <span class="signature-by">by</span>
         <img
-          src={`${base}/assets/paulina-name.svg`.replace('//', '/')}
+          src={`/assets/paulina-name.svg`.replace('//', '/')}
           alt="Paulina Cywoniuk"
           class="signature-name"
         />
@@ -60,11 +60,194 @@ const base = import.meta.env.BASE_URL;
       </svg>
     </a>
   </section>
+<!-- SECTION 2: physics cards -->
+  <section id="below" class="what-i-do">
 
-  <!-- Anchor for scroll. Real content goes here later. -->
-  <section id="below" class="below-hero">
-    <p class="below-placeholder">More sections coming soon…</p>
+    <div class="section-intro">
+      <p class="eyebrow">What I do →</p>
+      <p class="intro-text">
+        Three threads run through everything I make.
+        <span class="intro-hint">Grab the cards. Toss them around.</span>
+      </p>
+    </div>
+
+    <div class="physics-stage" id="physics-stage">
+
+      <button class="reset-btn" id="reset-btn" type="button" aria-label="Reset card positions">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M4 4v6h6M20 20v-6h-6M20 9A9 9 0 0 0 5 5.3L4 6M4 15a9 9 0 0 0 15 3.7L20 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <span>Reset</span>
+      </button>
+
+      <a href={`/portfolio/ui-ux-research`.replace('//', '/')} class="physics-card card-research" data-card-index="0">
+        <span class="card-title">UI/UX Research</span>
+      </a>
+
+      <a href={`/portfolio/vr-ar`.replace('//', '/')} class="physics-card card-vr" data-card-index="1">
+        <span class="card-title">VR &amp; AR</span>
+      </a>
+
+      <a href={`/portfolio/graphic-design`.replace('//', '/')} class="physics-card card-graphic" data-card-index="2">
+        <span class="card-title">Graphic Design</span>
+      </a>
+
+    </div>
+
   </section>
+
+  <script>
+    import Matter from 'matter-js';
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const stage = document.getElementById('physics-stage');
+    const cards = stage ? stage.querySelectorAll('.physics-card') : null;
+    const resetBtn = document.getElementById('reset-btn');
+
+    if (!stage || !cards || cards.length === 0) {
+      console.warn('Physics stage not found');
+    } else if (prefersReducedMotion) {
+      stage.classList.add('static-mode');
+    } else {
+      const { Engine, Runner, World, Bodies, Body, Mouse, MouseConstraint, Events } = Matter;
+
+      const engine = Engine.create();
+      const world = engine.world;
+      engine.gravity.y = 1;
+
+      let stageWidth = stage.clientWidth;
+      let stageHeight = stage.clientHeight;
+
+      const wallThickness = 60;
+      const walls = [
+        Bodies.rectangle(stageWidth / 2, stageHeight + wallThickness / 2, stageWidth * 2, wallThickness, { isStatic: true }),
+        Bodies.rectangle(-wallThickness / 2, stageHeight / 2, wallThickness, stageHeight * 2, { isStatic: true }),
+        Bodies.rectangle(stageWidth + wallThickness / 2, stageHeight / 2, wallThickness, stageHeight * 2, { isStatic: true }),
+      ];
+      World.add(world, walls);
+
+      const cardBodies = [];
+      const cardData = [];
+
+      cards.forEach((card, index) => {
+        const el = card;
+        const rect = el.getBoundingClientRect();
+        const cardWidth = rect.width || 220;
+        const cardHeight = rect.height || 120;
+
+        const dropX = stageWidth * (0.25 + index * 0.25) + (Math.random() - 0.5) * 40;
+        const dropY = -200 - index * 120;
+
+        const body = Bodies.rectangle(dropX, dropY, cardWidth, cardHeight, {
+          restitution: 0.55,
+          friction: 0.3,
+          frictionAir: 0.02,
+          density: 0.001,
+          angle: (Math.random() - 0.5) * 0.4,
+          chamfer: { radius: 16 },
+        });
+
+        cardBodies.push(body);
+        cardData.push({ el, body, cardWidth, cardHeight });
+      });
+
+      const mouse = Mouse.create(stage);
+      const mouseConstraint = MouseConstraint.create(engine, {
+        mouse,
+        constraint: { stiffness: 0.2, render: { visible: false } },
+      });
+      World.add(world, mouseConstraint);
+
+      mouse.element.removeEventListener('wheel', mouse.mousewheel);
+      mouse.element.removeEventListener('DOMMouseScroll', mouse.mousewheel);
+
+      let dragStartPos = null;
+      let isDragging = false;
+      const dragThreshold = 8;
+
+      Events.on(mouseConstraint, 'startdrag', () => {
+        dragStartPos = { x: mouse.position.x, y: mouse.position.y };
+        isDragging = false;
+      });
+
+      Events.on(mouseConstraint, 'mousemove', () => {
+        if (dragStartPos && mouseConstraint.body) {
+          const dx = mouse.position.x - dragStartPos.x;
+          const dy = mouse.position.y - dragStartPos.y;
+          if (Math.sqrt(dx * dx + dy * dy) > dragThreshold) {
+            isDragging = true;
+          }
+        }
+      });
+
+      cards.forEach((card) => {
+        card.addEventListener('click', (e) => {
+          if (isDragging) e.preventDefault();
+        });
+      });
+
+      Events.on(mouseConstraint, 'enddrag', () => {
+        setTimeout(() => {
+          dragStartPos = null;
+          isDragging = false;
+        }, 50);
+      });
+
+      function syncCards() {
+        cardData.forEach(({ el, body, cardWidth, cardHeight }) => {
+          const x = body.position.x - cardWidth / 2;
+          const y = body.position.y - cardHeight / 2;
+          el.style.transform = `translate(${x}px, ${y}px) rotate(${body.angle}rad)`;
+        });
+        requestAnimationFrame(syncCards);
+      }
+
+      let cardsDropped = false;
+      const dropCards = () => {
+        if (cardsDropped) return;
+        cardsDropped = true;
+        stage.classList.add('cards-active');
+        cardBodies.forEach((body, i) => {
+          setTimeout(() => { World.add(world, body); }, i * 250);
+        });
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              dropCards();
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.3 }
+      );
+      observer.observe(stage);
+
+      if (resetBtn) {
+        resetBtn.addEventListener('click', () => {
+          cardBodies.forEach((body) => World.remove(world, body));
+          cardBodies.forEach((body, index) => {
+            const dropX = stageWidth * (0.25 + index * 0.25) + (Math.random() - 0.5) * 40;
+            const dropY = -200 - index * 120;
+            Body.setPosition(body, { x: dropX, y: dropY });
+            Body.setVelocity(body, { x: 0, y: 0 });
+            Body.setAngularVelocity(body, 0);
+            Body.setAngle(body, (Math.random() - 0.5) * 0.4);
+          });
+          cardBodies.forEach((body, i) => {
+            setTimeout(() => { World.add(world, body); }, i * 250);
+          });
+        });
+      }
+
+      const runner = Runner.create();
+      Runner.run(runner, engine);
+      requestAnimationFrame(syncCards);
+    }
+  </script>
+
 </BaseLayout>
 
 <style>
@@ -189,21 +372,7 @@ const base = import.meta.env.BASE_URL;
   /* ============================================================
      PLACEHOLDER below the hero
      ============================================================ */
-  .below-hero {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 4rem var(--space-page);
-    min-height: 50vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-top: 1px dashed rgba(0, 0, 0, 0.1);
-  }
-
-  .below-placeholder {
-    color: var(--color-text-muted);
-    font-style: italic;
-  }
+  
 
   /* ============================================================
      ANIMATIONS
@@ -267,4 +436,209 @@ const base = import.meta.env.BASE_URL;
       margin-top: clamp(-2rem, -5vw, -3rem);
     }
   }
+/* ============================================
+     SECTION 2 — WHAT I DO (physics version)
+     ============================================ */
+
+  .what-i-do {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: clamp(3rem, 8vh, 6rem) var(--space-page);
+    overflow: hidden;
+  }
+
+  /* Section intro */
+  .section-intro {
+    max-width: 600px;
+    margin: 0 auto 3rem;
+    text-align: center;
+  }
+
+  .eyebrow {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-blue);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 1.25rem;
+  }
+
+  .intro-text {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+    line-height: 1.4;
+    color: var(--color-text);
+  }
+
+  .intro-hint {
+    display: block;
+    font-family: var(--font-body);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    margin-top: 0.75rem;
+    font-weight: 400;
+  }
+
+  /* ============================================
+     PHYSICS STAGE
+     The container where the physics happens.
+     Cards are absolutely positioned inside it.
+     ============================================ */
+  .physics-stage {
+    position: relative;
+    width: 100%;
+    height: clamp(420px, 60vh, 640px);
+    background: rgba(204, 251, 254, 0.25); /* very soft cyan tint */
+    border-radius: 24px;
+    overflow: hidden;
+    /* dotted border for that "playground" feeling */
+    border: 2px dashed rgba(128, 35, 146, 0.15);
+    /* prevent text selection when dragging cards */
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none; /* lets Matter.js handle touch events */
+  }
+
+  /* Reset button */
+  .reset-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.9rem;
+    background-color: var(--color-bg);
+    border: 1.5px solid var(--color-text);
+    border-radius: 999px;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: transform 0.15s ease, background-color 0.2s ease;
+  }
+
+  .reset-btn:hover {
+    background-color: var(--color-lime);
+    transform: translateY(-1px);
+  }
+
+  .reset-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* ============================================
+     PHYSICS CARDS
+     ============================================ */
+  .physics-card {
+    /* Absolutely positioned — JS handles position via transform */
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* Hidden until physics is ready */
+    opacity: 0;
+    /* Card shape */
+    width: clamp(160px, 22vw, 240px);
+    min-height: 100px;
+    padding: 1.5rem 1.25rem;
+    border-radius: 16px;
+    /* Cursor and selection */
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    /* Smooth appearance when activated */
+    transition: opacity 0.3s ease, box-shadow 0.2s ease;
+    /* The text inside */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+    /* Drop shadow for cut-paper feel */
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.08),
+      0 1px 3px rgba(0, 0, 0, 0.05);
+    /* Position is set via JS — no transition on transform or it'll fight physics */
+    will-change: transform;
+  }
+
+  .physics-stage.cards-active .physics-card {
+    opacity: 1;
+  }
+
+  .physics-card:hover {
+    box-shadow:
+      0 8px 24px rgba(0, 0, 0, 0.12),
+      0 2px 6px rgba(0, 0, 0, 0.08);
+  }
+
+  .physics-card:active {
+    cursor: grabbing;
+  }
+
+  .card-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  /* Per-card colors */
+  .card-research {
+    background-color: var(--color-cyan);
+    color: var(--color-purple);
+  }
+
+  .card-vr {
+    background-color: var(--color-orange);
+    color: var(--color-bg);
+  }
+
+  .card-graphic {
+    background-color: var(--color-purple);
+    color: var(--color-bg);
+  }
+
+  /* ============================================
+     STATIC FALLBACK (reduced motion)
+     ============================================ */
+  .physics-stage.static-mode {
+    height: auto;
+    padding: 2rem;
+    background: transparent;
+    border: none;
+  }
+
+  .physics-stage.static-mode .reset-btn {
+    display: none;
+  }
+
+  .physics-stage.static-mode .physics-card {
+    position: relative;
+    opacity: 1;
+    transform: none !important;
+    width: 100%;
+    margin-bottom: 1rem;
+    cursor: pointer;
+  }
+
+  /* ============================================
+     MOBILE
+     ============================================ */
+  @media (max-width: 640px) {
+    .physics-stage {
+      height: clamp(360px, 50vh, 480px);
+    }
+
+    .physics-card {
+      width: clamp(140px, 40vw, 180px);
+      padding: 1rem;
+    }
+  }
+ 
 </style>

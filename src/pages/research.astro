@@ -4,18 +4,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 <BaseLayout
   title="Research — Paulina Cywoniuk"
-  description="Master's thesis research on UI design in VR narrative games. Findings, design tips, and downloadable papers."
+  description="Master's thesis on UI marker design and narrative immersion in VR. Findings, design implications, and downloadable papers."
 >
-  <!-- HERO -->
+ <!-- HERO -->
   <section class="research-hero">
     <p class="research-eyebrow">Master's Thesis · 2026</p>
     <h1 class="research-title">
-      How does the design of <em>interaction markers</em> in VR shape players' immersion in a story?
+      How to mark <em>interactable objects</em> in a VR experience without breaking players' <em>immersion</em> into the game story.
     </h1>
     <p class="research-lede">
-      A study of UI design in narrative-driven Virtual Reality —
-      and what 35 players taught us about the
-      <span class="hl">unexpected</span> ways interfaces shape immersion.
+      A master's <span class="hl">UI/UX research</span> of interaction markers design
+      in VR narration-based games — quantitative and qualitative
+      between-subjects experiment with 35 participants across 3 conditions.
     </p>
     <div class="research-meta">
       <span><strong>Breda University of Applied Sciences</strong></span>
@@ -26,33 +26,39 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
   </section>
 
-  <!-- IMAGE PLACEHOLDER -->
-  <section class="research-figure">
-    <div class="figure-placeholder">
-      <p>[ Hero image: Echoes of Abandonment — clay-sculpted bedroom ]</p>
-      <p class="figure-caption">Drop your game screenshot here once available</p>
-    </div>
-  </section>
-
-  <!-- CONTEXT -->
-  <section class="research-section">
-    <h2>The question</h2>
+ <!-- ABSTRACT BLOCK -->
+  <section class="research-section abstract-block">
+    <h2>Abstract</h2>
     <p>
-      VR is becoming a serious medium for storytelling — but the design of its interfaces
-      hasn't caught up. Most UI conventions come from flat-screen games:
-      menus, button prompts, 2D overlays. These break the very immersion that makes VR worth using.
+      This paper investigates the influence of <strong>interaction marker design</strong>
+      in VR experiences on players' ability to become immersed in the narration of the game.
+      Following diegetics, semiotics, and affordance theories, the researcher created a VR
+      game <em>"Echoes of Abandonment"</em> with markers of interactable objects present
+      in the digital room, used in the experiment.
     </p>
     <p>
-      In VR, <strong>the world itself can be the interface</strong>. The objects players touch,
-      pick up, and interact with become UI elements. But how do you signal which objects
-      are interactive — without breaking the spell?
+      The methodology consisted of participants playing the VR game, then filling out a
+      questionnaire with the <em>Narrative Engagement Scale</em> (Busselle and Bilandzic, 2009)
+      and <em>Immersion Experience Questionnaire — Shortened Form</em> (Cutting et al., 2025),
+      followed by custom questions created by the researcher of this study. During the procedure,
+      observations of gameplay and informal interviews served as additional data collection.
+    </p>
+    <p>
+      The procedure was repeated among <strong>35 participants</strong>, divided into three
+      conditions — diegetic markers, non-diegetic markers, and a control group.
+      Narrative immersion was measured with two questionnaires —
+      <em>IEQ-SF</em> and <em>NES</em> — and custom questions provided insight specific to
+      the study's research question. Analysis of the quantitative data in SPSS pointed
+      towards the null hypothesis, meaning <strong>there is no statistical influence
+      across conditions on players' narrative immersion</strong>. However, the rest of the
+      data points towards a more nuanced conclusion.
     </p>
   </section>
 
-  <!-- THE STUDY -->
+  <!-- STUDY AT A GLANCE -->
   <section class="research-section">
-    <h2>The study</h2>
-    <div class="study-stats">
+    <h2>The study at a glance</h2>
+<div class="study-stats">
       <div class="stat">
         <span class="stat-number">35</span>
         <span class="stat-label">Participants</span>
@@ -62,100 +68,121 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         <span class="stat-label">Conditions</span>
       </div>
       <div class="stat">
-        <span class="stat-number">2</span>
-        <span class="stat-label">Validated questionnaires</span>
+        <span class="stat-number">10<span class="stat-unit">min</span></span>
+        <span class="stat-label">of VR play</span>
       </div>
     </div>
     <p>
-      I tested three types of interaction markers in
-      <em>Echoes of Abandonment</em>, a hand-sculpted VR experience about a child
-      coping with their parents' divorce: <strong>diegetic markers</strong> (subtle,
-      world-integrated cues), <strong>non-diegetic markers</strong> (overlay icons),
-      and a <strong>control group</strong> with no markers. Narrative immersion was
-      measured using the IEQ-SF and NES questionnaires alongside custom questions.
+      Participants were randomly assigned to one of three marker conditions in
+      <em>Echoes of Abandonment</em>, a VR experience about a child coping with their parents'
+      divorce: <strong>diegetic markers</strong> (a brightness shader),
+      <strong>non-diegetic markers</strong> (an exclamation mark icon), and a
+      <strong>control group</strong> with no markers. Narrative immersion was assessed
+      using the IEQ-SF and NES alongside custom Likert-scale items.
     </p>
   </section>
 
   <!-- FINDINGS -->
   <section class="research-section">
-    <h2>Key findings</h2>
+    <h2>What I found</h2>
 
     <div class="finding-card finding-null">
       <div class="finding-tag">Primary finding</div>
       <h3>Marker design did not significantly affect narrative immersion.</h3>
       <p>
-        Statistical analysis (ANOVA, Kruskal-Wallis) showed no significant difference
-        between conditions. This null result aligns with prior VR studies —
-        but it's only part of the story.
+        ANOVA and Kruskal-Wallis tests revealed no statistically significant differences
+        between conditions, with effect sizes consistently below η² = .02.
+        Both hypotheses — that diegetic markers would support immersion, and that
+        non-diegetic markers would disturb it — were rejected.
       </p>
     </div>
 
     <div class="finding-card finding-surprise">
-      <div class="finding-tag">Unexpected finding</div>
-      <h3>Non-diegetic markers were more recognisable — and didn't disturb immersion.</h3>
+      <div class="finding-tag">Qualitative insight</div>
+      <h3>Non-diegetic markers were perceived as clearer signifiers.</h3>
       <p>
-        Contrary to my hypothesis, players in the non-diegetic condition reported
-        higher recognition of interactable objects without a corresponding drop
-        in narrative engagement. This challenges a common assumption in VR design.
+        Open-ended questionnaire responses suggested participants in the non-diegetic
+        condition tended to find the exclamation mark markers easier to interpret.
+        Diegetic markers received more mixed responses — some appreciated their subtlety
+        and immersion-preserving qualities, while others, particularly those with less
+        gaming experience, found them insufficiently clear as signifiers.
       </p>
     </div>
 
     <div class="finding-card finding-surprise">
-      <div class="finding-tag">Unexpected finding</div>
-      <h3>Sound design influenced immersion more than visual UI.</h3>
+      <div class="finding-tag">Qualitative insight</div>
+      <h3>Sound design may have acted as a confounding variable.</h3>
       <p>
-        Multiple participants across conditions cited the game's audio
-        (rather than markers) as the immersion-breaking element —
-        suggesting that <strong>auditory UI deserves the same scrutiny as visual UI</strong>.
+        The audio design of <em>Echoes of Abandonment</em> appeared to create frustration
+        across all conditions, potentially dampening narrative immersion scores uniformly.
+        This suggests <strong>auditory UI deserves the same scrutiny as visual UI</strong>
+        in VR research.
       </p>
     </div>
-  </section>
 
-  <!-- TIPS PREVIEW -->
-  <section class="research-section tips-preview">
-    <h2>Design tips for VR developers</h2>
-    <p>
-      The most actionable output of this research: a growing library of
-      evidence-based design tips for VR developers working with diegetic
-      and non-diegetic UI in narrative experiences.
-    </p>
-    <a href={`/research/tips`.replace('//', '/')} class="btn btn-primary">Browse the tips library →</a>
-    <p class="tips-coming-soon">[ Tips library coming soon — currently being built ]</p>
+    <div class="finding-card finding-theory">
+      <div class="finding-tag">Theoretical implication</div>
+      <h3>Marker design may matter less when narrative and UI operate on separate sensory channels.</h3>
+      <p>
+        In <em>Echoes of Abandonment</em>, the story unfolds auditorily while the markers
+        are visual. This suggests the relationship between UI design and narrative
+        immersion may be mediated by whether they share the same sensory modality —
+        an interpretation that extends Köhle et al. (2021) from visually-driven VR shooters
+        to narrative VR experiences.
+      </p>
+    </div>
   </section>
 
   <!-- DOWNLOADS -->
   <section class="research-section downloads">
-    <h2>Download the paper</h2>
+    <h2>Read the paper</h2>
     <p>The thesis is available in multiple formats depending on how deep you want to go.</p>
     <div class="downloads-grid">
-      <a href="#" class="download-card">
-        <span class="download-format">1-pager</span>
+      <a href="/thesis/paulina-cywoniuk-thesis-draft.pdf" class="download-card download-card-primary" download>
+        <span class="download-format">Full thesis</span>
+        <span class="download-desc">Complete research with methodology, results, and discussion.</span>
+        <span class="download-status">Download PDF →</span>
+      </a>
+      <div class="download-card download-card-disabled">
+        <span class="download-format">1-pager summary</span>
         <span class="download-desc">The TL;DR — for sharing.</span>
         <span class="download-status">Coming soon</span>
-      </a>
-      <a href="#" class="download-card">
-        <span class="download-format">3-pager</span>
-        <span class="download-desc">For practitioners.</span>
+      </div>
+      <div class="download-card download-card-disabled">
+        <span class="download-format">Extended abstract</span>
+        <span class="download-desc">8 pages, for conference submission.</span>
         <span class="download-status">Coming soon</span>
-      </a>
-      <a href="#" class="download-card">
-        <span class="download-format">8-page extended abstract</span>
-        <span class="download-desc">For conference submission.</span>
-        <span class="download-status">Coming soon</span>
-      </a>
-      <a href="#" class="download-card download-card-primary">
-        <span class="download-format">Full thesis (PDF)</span>
-        <span class="download-desc">Complete research with methodology and appendices.</span>
-        <span class="download-status">Coming soon</span>
-      </a>
+      </div>
     </div>
+    <p class="download-note">
+      <em>This is a working draft submitted as part of the Master's of Game Technology
+      programme at Breda University of Applied Sciences (2026). The version shared here
+      may differ from the final examined version.</em>
+    </p>
+  </section>
+
+  <!-- TIPS PREVIEW (acknowledged as coming soon, not broken link) -->
+  <section class="research-section tips-preview">
+    <h2>Design tips for VR developers</h2>
+    <p>
+      A planned next step from this research: a library of evidence-based design tips
+      for VR developers working with diegetic and non-diegetic UI in narrative experiences.
+    </p>
+    <p class="tips-coming-soon">
+      Currently in development — check back, or reach out via the
+      <a href="/contact">contact page</a> to be notified.
+    </p>
+  </section>
+
+  <!-- BACK NAV -->
+  <section class="research-section back-nav">
+    <a href="/" class="back-link">← Back to home</a>
   </section>
 </BaseLayout>
 
 <style>
   /* Shared section spacing */
   .research-hero,
-  .research-figure,
   .research-section {
     max-width: 800px;
     margin: 0 auto;
@@ -211,29 +238,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     gap: 0.5rem;
   }
 
-  /* FIGURE */
-  .figure-placeholder {
-    aspect-ratio: 16 / 9;
-    background-color: var(--color-cyan);
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: var(--color-purple);
-    font-family: var(--font-display);
-    font-size: 1.1rem;
-  }
-
-  .figure-caption {
-    font-size: 0.85rem;
-    color: var(--color-text-muted);
-    margin-top: 1rem;
-    font-family: var(--font-body);
-    font-style: italic;
-  }
-
   /* SECTIONS */
   .research-section h2 {
     font-size: clamp(1.75rem, 4vw, 2.5rem);
@@ -247,9 +251,28 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     margin-bottom: 1.25rem;
   }
 
+  .research-section em {
+    font-style: italic;
+  }
+
   .research-section strong {
     color: var(--color-text);
     font-weight: 600;
+  }
+
+  /* ABSTRACT block — distinct visual treatment */
+  .abstract-block {
+    background-color: var(--color-cyan);
+    border-radius: 16px;
+    padding: 2.5rem !important;
+    max-width: 800px;
+  }
+
+  .abstract-block h2 {
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-purple);
   }
 
   /* STUDY STATS */
@@ -263,17 +286,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     border-radius: 12px;
   }
 
-  .stat {
-    text-align: center;
-  }
+  .stat { text-align: center; }
 
-  .stat-number {
+ .stat-number {
     display: block;
     font-family: var(--font-display);
-    font-size: 3rem;
+    font-size: 3.5rem;
     font-weight: 900;
     color: var(--color-purple);
     line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .stat-unit {
+    /* Override the parent's big font-size — must be explicit */
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-left: 0.1em;
+    color: var(--color-purple);
+    /* Lift slightly so 'min' aligns with the cap height of '10' */
+    vertical-align: 0.6em;
+    letter-spacing: 0;
   }
 
   .stat-label {
@@ -293,13 +326,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   }
 
   .finding-null {
-    background-color: var(--color-cyan);
-    border-left: 4px solid var(--color-blue);
+    background-color: rgba(243, 146, 55, 0.18);
+    border-left: 4px solid var(--color-orange);
   }
 
   .finding-surprise {
     background-color: rgba(199, 239, 0, 0.2);
     border-left: 4px solid var(--color-lime);
+  }
+
+  .finding-theory {
+    background-color: rgba(128, 35, 146, 0.08);
+    border-left: 4px solid var(--color-purple);
   }
 
   .finding-tag {
@@ -320,20 +358,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   .finding-card p {
     font-size: 1rem;
     margin-bottom: 0;
-  }
-
-  /* TIPS PREVIEW */
-  .tips-preview {
-    background-color: var(--color-cyan);
-    border-radius: 16px;
-    padding: 3rem 2rem;
-  }
-
-  .tips-coming-soon {
-    font-size: 0.85rem;
-    color: var(--color-text-muted);
-    margin-top: 1rem;
-    font-style: italic;
   }
 
   /* DOWNLOADS */
@@ -373,6 +397,16 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     color: white;
   }
 
+  .download-card-disabled {
+    cursor: default;
+    opacity: 0.6;
+  }
+
+  .download-card-disabled:hover {
+    transform: none;
+    background-color: var(--color-bg);
+  }
+
   .download-format {
     font-family: var(--font-display);
     font-size: 1.25rem;
@@ -390,27 +424,48 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    opacity: 0.6;
+    opacity: 0.7;
     margin-top: auto;
+    font-weight: 500;
   }
 
-  /* BUTTONS */
-  .btn {
-    padding: 0.85rem 1.5rem;
-    border-radius: 999px;
-    font-weight: 500;
+  .download-note {
+    margin-top: 1.5rem;
+    font-size: 0.9rem !important;
+    color: var(--color-text-muted);
+  }
+
+  /* TIPS PREVIEW */
+  .tips-preview {
+    background-color: var(--color-cyan);
+    border-radius: 16px;
+    padding: 3rem 2rem !important;
+  }
+
+  .tips-coming-soon {
+    font-size: 0.95rem !important;
+    color: var(--color-text-muted);
+    margin-top: 0.5rem;
+    font-style: italic;
+  }
+
+  .tips-coming-soon a {
+    color: var(--color-purple);
+    border-bottom: 1px solid var(--color-purple);
+  }
+
+  /* BACK NAV */
+  .back-nav {
+    padding-top: 1rem !important;
+    padding-bottom: 4rem !important;
+  }
+
+  .back-link {
+    color: var(--color-text-muted);
     font-size: 0.95rem;
-    transition: transform 0.15s ease, background-color 0.2s ease;
-    display: inline-block;
-    text-decoration: none;
   }
-  .btn:hover { transform: translateY(-2px); }
-  .btn-primary {
-    background-color: var(--color-purple);
-    color: white;
-  }
-  .btn-primary:hover {
-    background-color: var(--color-blue);
-    color: white;
+
+  .back-link:hover {
+    color: var(--color-purple);
   }
 </style>

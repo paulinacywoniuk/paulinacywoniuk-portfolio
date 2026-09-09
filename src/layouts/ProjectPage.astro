@@ -1,0 +1,233 @@
+---
+/* ============================================================
+   ProjectPage.astro   (a LAYOUT — lives in src/layouts/)
+
+   The reusable structure for every project detail page:
+     1. Logo (left) + Title/subtitle (right)  — the lockup
+     2. Header image (full landscape)
+     3. Keyword pill bar (type / role / team / timeline)
+     4. Description text
+     5. Gallery of images below
+
+   HOW IT'S USED:
+   Each project page (e.g. roots.astro) imports this and passes
+   its content as props. The gallery images and description are
+   passed as "slots" (see the <slot> tags) so each project can
+   put whatever it wants there.
+
+   Most props are optional — a project with no logo just omits
+   the `logo` prop and the title sits alone.
+   ============================================================ */
+
+import BaseLayout from './BaseLayout.astro';
+
+const {
+  // --- Head / SEO ---
+  pageTitle,                 // browser tab title
+  pageDescription = '',      // meta description
+
+  // --- Lockup ---
+  logo,                      // path to logo image (optional)
+  logoAlt = '',
+  title,                     // main project title, e.g. "Roots Film Festival"
+  subtitle,                  // optional second line, e.g. "Filmhuis Den Haag"
+  titleFont = 'var(--font-display)',  // per-project title font knob
+
+  // --- Header image ---
+  headerImage,               // path to the big header image
+  headerAlt = '',
+
+  // --- Keyword pills: an array of strings, shown in one rounded bar ---
+  keywords = [],             // e.g. ["Graphic Design", "Visual Identity", "Team", "3 months"]
+} = Astro.props;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  <article class="project-page">
+
+    <!-- 1. LOCKUP: logo left, title right -->
+    <header class="lockup">
+      {logo && (
+        <img src={logo} alt={logoAlt} class="lockup-logo" />
+      )}
+      <div class="lockup-text">
+        <h1 class="lockup-title" style={`font-family: ${titleFont};`}>{title}</h1>
+        {subtitle && <p class="lockup-subtitle">{subtitle}</p>}
+      </div>
+    </header>
+
+    <!-- 2. HEADER IMAGE -->
+    {headerImage && (
+      <div class="header-image-wrap">
+        <img src={headerImage} alt={headerAlt} class="header-image" />
+      </div>
+    )}
+
+    <!-- 3. KEYWORD PILLS -->
+    {keywords.length > 0 && (
+      <div class="pill-bar">
+        {keywords.map((word: string) => (
+          <span class="pill">{word}</span>
+        ))}
+      </div>
+    )}
+
+    <!-- 4. DESCRIPTION — passed in as the default slot content -->
+    <div class="description">
+      <slot />
+    </div>
+
+    <!-- 5. GALLERY — passed in as a named slot -->
+    <div class="gallery">
+      <slot name="gallery" />
+    </div>
+
+    <!-- Back link -->
+    <a href="/portfolio" class="back-link">← Back to portfolio</a>
+
+  </article>
+</BaseLayout>
+
+<style>
+  .project-page {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: clamp(2rem, 6vw, 4rem) var(--space-page);
+  }
+
+  /* ============================================================
+     1. LOCKUP — logo left, title right, side by side
+     ============================================================ */
+  .lockup {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.5rem, 4vw, 3rem);       /* KNOB: space between logo and title */
+    margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .lockup-logo {
+    width: clamp(100px, 15vw, 200px);    /* KNOB: logo size */
+    height: auto;
+    flex-shrink: 0;                       /* logo keeps its size, title wraps instead */
+  }
+
+  .lockup-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);  /* KNOB: title size */
+    line-height: 1.1;
+    color: var(--color-text);
+  }
+
+  .lockup-subtitle {
+    font-family: var(--font-subtitle);
+    font-size: clamp(1.25rem, 3vw, 2rem); /* KNOB: subtitle size */
+    line-height: 1.1;
+    color: var(--color-text);
+    margin-top: 0.25rem;
+  }
+
+  /* ============================================================
+     2. HEADER IMAGE
+     ============================================================ */
+  .header-image-wrap {
+    width: 100%;
+    border-radius: 16px;                 /* KNOB: roundness */
+    overflow: hidden;
+    margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.08),
+      0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .header-image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ============================================================
+     3. KEYWORD PILL BAR — one rounded container, pills inside
+     ============================================================ */
+  .pill-bar {
+    display: flex;
+    flex-wrap: wrap;                      /* pills wrap on small screens */
+    align-items: center;
+    justify-content: center;
+    gap: clamp(1rem, 3vw, 2.5rem);       /* KNOB: space between pills */
+    padding: clamp(0.75rem, 2vw, 1.1rem) clamp(1.5rem, 4vw, 2.5rem);
+    border: 1.5px solid var(--color-purple);
+    border-radius: 999px;                /* full pill shape for the container */
+    margin: 0 auto clamp(2.5rem, 6vw, 4rem);
+    width: fit-content;
+    max-width: 100%;
+  }
+
+  .pill {
+    font-family: var(--font-body);
+    font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+    color: var(--color-text);
+    white-space: nowrap;
+    /* Icon slot: if you later add an icon before the label, it
+       sits inline here. For now it's just the text. */
+  }
+
+  /* ============================================================
+     4. DESCRIPTION
+     ============================================================ */
+  .description {
+    max-width: 78ch;                     /* KNOB: text column width for readability */
+    margin: 0 auto clamp(3rem, 8vw, 5rem);
+    font-size: clamp(1rem, 1.8vw, 1.15rem);
+    line-height: 1.7;
+    color: var(--color-text);
+  }
+
+  /* Style paragraphs passed into the slot */
+  .description :global(p) {
+    margin-bottom: 1.25rem;
+  }
+
+  /* ============================================================
+     5. GALLERY — images stacked, generous spacing
+     The actual images come from the project page via the
+     "gallery" slot, so each project controls its own gallery.
+     ============================================================ */
+  .gallery {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.5rem, 4vw, 5rem);       /* KNOB: space between gallery images */
+    margin-bottom: clamp(3rem, 8vw, 5rem);
+  }
+
+  /* Style any image dropped into the gallery slot */
+  .gallery :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 16px;
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.08),
+      0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  /* ============================================================
+     BACK LINK
+     ============================================================ */
+  .back-link {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--color-blue);
+  }
+
+  /* ============================================================
+     MOBILE — stack the lockup vertically so logo + title don't
+     cramp on narrow screens.
+     ============================================================ */
+  @media (max-width: 640px) {
+    .lockup {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+  }
+</style>

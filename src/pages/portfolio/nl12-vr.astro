@@ -1,0 +1,54 @@
+---
+/* NL12 VR Production project page.  URL: /portfolio/nl12-vr
+   Images go in public/portfolio/nl12/ */
+import ProjectPage from '../../layouts/ProjectPage.astro';
+---
+
+<ProjectPage
+  pageTitle="NL12 — VR Production — Paulina Cywoniuk"
+  pageDescription="VR production internship at NL12 studio, working on 'The March' — an immersive VR history experience."
+
+  logo="/portfolio/nl12/nl12-logo.jpg"
+  logoAlt="NL12 lab logo"
+
+  title="Internship — VR Production"
+  subtitle="NL12 Studio"
+
+  headerImage="/portfolio/nl12/nl12-header.png"
+  headerAlt="VR production workstation with Blender and a 3D scan"
+
+  keywords={["VR", "Unity", "Team", "4 months"]}
+>
+
+  <p>
+    During my internship at the NL12 studio, I contributed to the development of
+    <em>The March</em>, a VR project designed to immerse viewers in the history of
+    global conflicts. This war-themed virtual world uses photography and the immersive
+    capabilities of VR to bring audiences closer to the human stories behind these
+    historical events.
+  </p>
+  <p>
+    My responsibilities included 3D editing tasks such as UV mapping, texture painting,
+    and modeling, ensuring that the visual elements were both historically accurate and
+    engaging. I also worked within Unity, helping to build and optimise scenes for the
+    VR environment.
+  </p>
+  <p>
+    This project allowed me to combine technical 3D skills with creative storytelling,
+    much like my other work, where I strive to create interactive, emotionally resonant
+    experiences. <em>The March</em> stands as a powerful example of how immersive media
+    can connect people to history in new, impactful ways.
+  </p>
+  <p class="disclaimer">
+    * This project is not yet released, so out of confidentiality the images shown here
+    are not the exact assets I produced in the studio, but are similar to my work there.
+  </p>
+
+  <Fragment slot="gallery">
+    <img src="/portfolio/nl12/nl12-1.jpg" alt="Photogrammetry-scanned skull with historical texture" />
+    <img src="/portfolio/nl12/nl12-2.jpg" alt="War-themed VR scene in greyscale" />
+    <img src="/portfolio/nl12/nl12-3.jpg" alt="3D-scanned butterfly and bird specimens" />
+    <img src="/portfolio/nl12/nl12-4.jpg" alt="Composited historical scene of children" />
+  </Fragment>
+
+</ProjectPage>

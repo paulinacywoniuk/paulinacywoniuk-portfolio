@@ -1,117 +1,115 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
 
-// Note the path: ../../ because we're now two folders deep
+/* ============================================================
+   THE FIVE PROJECTS — this is your content, as data.
 
-const base = import.meta.env.BASE_URL;
+   To add or edit a project later, you edit THIS array. You do
+   not touch layout code. Each project is an object with the
+   props ProjectCard understands.
 
-const categories = [
+   Pass EITHER titleText (for live-font titles) OR titleSvg
+   (for outlined-font titles like Echoes). See ProjectCard.astro
+   for the full list of options.
+
+   NOTE ON IMAGES: the paths below point at files in your
+   `public/` folder. Put the images there (e.g.
+   public/portfolio/roots-cover.jpg) and the paths will work.
+   Images that don't exist yet will show as broken — that's
+   expected until you add them. I've left placeholders so you
+   can see the layout and swap in real files as you make them.
+   ============================================================ */
+
+const projects = [
   {
-    title: 'VR & AR',
-    href: `/portfolio/vr-ar`.replace('//', '/'),
-    description: 'Immersive experiences and spatial interfaces.',
-    color: 'var(--color-purple)',
-    bgColor: 'var(--color-cyan)',
+    href: '/portfolio/roots',
+    image: '/portfolio/roots-cover.png',
+    imageAlt: 'ROOTS Film Festival visual identity — festival banners on a building',
+    titleText: 'Roots Film Festival',
+    // Roots title font is still TBD (open-source display face).
+    // For now it uses your display font. We'll set titleFont here
+    // once you pick one, e.g. titleFont: "'Fraunces', serif".
+  },
+    {
+    href: '/portfolio/echoes-design',
+    image: '/portfolio/echoes-cover.png',
+    imageAlt: 'Echoes of Abandonment — VR experience with a hand-sculpted clay bedroom',
+    titleText: 'Echoes of Abandonment',
   },
   {
-    title: 'Graphic Design',
-    href: `/portfolio/graphic-design`.replace('//', '/'),
-    description: 'Visual identity, illustration, and printed matter.',
-    color: 'var(--color-text)',
-    bgColor: 'var(--color-orange)',
+    href: '/portfolio/nl12-vr',
+    image: '/portfolio/nl12-cover.png',
+    imageAlt: 'NL12 internship — VR production work',
+    titleText: 'NL12 — VR Production',
   },
   {
-    title: 'UI/UX Research',
-    href: `/portfolio/ui-ux-research`.replace('//', '/'),
-    description: 'User research, interaction studies, and prototyping.',
-    color: 'white',
-    bgColor: 'var(--color-blue)',
+    href: '/portfolio/craftiplays',
+    image: '/portfolio/craftiplays-cover.png',
+    imageAlt: 'Lands of Magic — mobile game asset illustrations',
+    titleText: 'Lands of Magic — Game Assets',
+  },
+  {
+    href: '/portfolio/irdeto',
+    image: '/portfolio/irdeto-cover.png',
+    imageAlt: 'Irdeto — visual design work',
+    titleText: 'Visual Design — Irdeto',
+    // Irdeto uses Montserrat (open-source, safe). We'll wire the
+    // font import + set titleFont when we build this card:
+    // titleFont: "'Montserrat', sans-serif",
   },
 ];
 ---
 
 <BaseLayout
   title="Portfolio — Paulina Cywoniuk"
-  description="Selected projects across VR/AR, graphic design, and UI/UX research."
+  description="Selected design and research projects by Paulina Cywoniuk."
 >
-  <section class="portfolio-intro">
-    <h1>Portfolio</h1>
-    <p>Three threads of practice — choose where to start.</p>
-  </section>
+  <section class="portfolio">
 
-  <section class="categories">
-    {categories.map((cat) => (
-      <a href={cat.href} class="category-card" style={`background-color: ${cat.bgColor}; color: ${cat.color};`}>
-        <h2>{cat.title}</h2>
-        <p>{cat.description}</p>
-        <span class="category-arrow">→</span>
-      </a>
-    ))}
+    <header class="portfolio-header">
+      <h1 class="portfolio-heading">Portfolio</h1>
+      <p class="portfolio-intro">
+        A selection of my work across design and research.
+      </p>
+    </header>
+
+    <div class="project-list">
+      {projects.map((project) => (
+        <ProjectCard {...project} />
+      ))}
+    </div>
+
   </section>
 </BaseLayout>
 
 <style>
-  .portfolio-intro {
+  .portfolio {
     max-width: var(--max-width);
     margin: 0 auto;
-    padding: clamp(3rem, 8vh, 5rem) var(--space-page) 2rem;
+    padding: clamp(2rem, 6vw, 4rem) var(--space-page);
   }
 
-  .portfolio-intro h1 {
-    font-size: clamp(2.5rem, 6vw, 4rem);
+  .portfolio-header {
+    margin-bottom: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .portfolio-heading {
+    font-size: clamp(2.5rem, 7vw, 4.5rem);
     color: var(--color-purple);
-    margin-bottom: 1rem;
-  }
-
-  .portfolio-intro p {
-    font-size: 1.15rem;
-    color: var(--color-text-muted);
-  }
-
-  .categories {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: 2rem var(--space-page);
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .category-card {
-    display: block;
-    padding: 2.5rem 2rem;
-    border-radius: 16px;
-    text-decoration: none;
-    transition: transform 0.2s ease;
-    position: relative;
-    min-height: 240px;
-  }
-
-  .category-card:hover {
-    transform: translateY(-4px);
-  }
-
-  .category-card h2 {
-    font-size: 2rem;
     margin-bottom: 0.5rem;
-    color: inherit;
   }
 
-  .category-card p {
-    font-size: 1rem;
-    line-height: 1.5;
-    opacity: 0.85;
+  .portfolio-intro {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--color-text-muted);
+    max-width: 50ch;
   }
 
-  .category-arrow {
-    position: absolute;
-    bottom: 2rem;
-    right: 2rem;
-    font-size: 1.5rem;
-    transition: transform 0.2s ease;
-  }
-
-  .category-card:hover .category-arrow {
-    transform: translateX(6px);
+  /* The list itself is just the cards stacked. Each card handles
+     its own bottom spacing (margin-bottom in ProjectCard), so
+     this container stays simple. */
+  .project-list {
+    display: block;
   }
 </style>

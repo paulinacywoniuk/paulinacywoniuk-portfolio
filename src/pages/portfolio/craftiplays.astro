@@ -1,0 +1,43 @@
+---
+/* CraftiPlays / Lands of Magic project page.  URL: /portfolio/craftiplays
+   Images go in public/portfolio/craftiplays/ */
+import ProjectPage from '../../layouts/ProjectPage.astro';
+---
+
+<ProjectPage
+  pageTitle="Lands of Magic — Game Assets — Paulina Cywoniuk"
+  pageDescription="Illustrated game assets for the mobile game 'Lands of Magic' by CraftiPlays."
+
+  logo="/portfolio/craftiplays/craftiplays-logo.jpeg"
+  logoAlt="CraftiPlays logo"
+
+  title={'"Lands of Magic"'}
+  subtitle="Mobile Game Assets Design"
+
+  headerImage="/portfolio/craftiplays/craftiplays-header.png"
+  headerAlt="Colourful illustrated game assets for Lands of Magic"
+
+  keywords={["Mobile Game", "Unity + Adobe Suite", "Team", "10 months"]}
+>
+
+  <p>
+    In 2021 I was part of a team at CraftiPlays, who hired me as a graphic designer for
+    their ongoing project — a mobile game called <em>Lands of Magic</em>. My role
+    consisted of making illustrations of assets for the game that were consistent with
+    the style of an asset pack they had already purchased before I joined the team.
+  </p>
+  <p>
+    All designs I made for them are vectorised in Illustrator, so that the whole team
+    can use them according to their needs. In <em>Lands of Magic</em>, the illustrations
+    became more than just functional assets; they played a role in immersing players in
+    a magical world where visuals enrich the storytelling and gameplay experience.
+  </p>
+
+  <Fragment slot="gallery">
+    <img src="/portfolio/craftiplays/craftiplays-1.jpg" alt="Illustrated magical plants and trees" />
+    <img src="/portfolio/craftiplays/craftiplays-2.jpg" alt="Illustrated cauldron and magical houses" />
+    <img src="/portfolio/craftiplays/craftiplays-3.jpg" alt="Game UI: login and sign-up screens" />
+    <img src="/portfolio/craftiplays/craftiplays-4.jpg" alt="Game UI: loading screen with progress bars" />
+  </Fragment>
+
+</ProjectPage>

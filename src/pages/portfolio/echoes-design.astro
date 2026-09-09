@@ -1,0 +1,50 @@
+---
+/* Echoes of Abandonment — DESIGN entry.  URL: /portfolio/echoes-design
+   Images go in public/portfolio/echoes/
+   Plain-text title for now (may switch to Dreaming Out Loud SVG later). */
+import ProjectPage from '../../layouts/ProjectPage.astro';
+---
+
+<ProjectPage
+  pageTitle="Echoes of Abandonment — Paulina Cywoniuk"
+  pageDescription="BA graduation project — a VR interactive storytelling experience about a child coping with their parents' divorce."
+
+  logo="/portfolio/echoes/echoes-logo.svg
+  "
+  logoAlt="ROOTS Film Festival logo"
+  title="Echoes of Abandonment"
+  subtitle="Interactive Storytelling VR Experience and UX Research Project"
+
+  headerImage="/portfolio/echoes/echoes-header.png"
+  headerAlt="Player in VR headset interacting with a hand-sculpted clay bedroom"
+
+  keywords={["VR", "Unity", "Solo", "4 months"]}
+>
+
+  <p>
+    This is a Virtual Reality interactive storytelling experience about a child who is
+    dealing with their parents divorcing. By putting on VR goggles we are placed in a
+    world sculpted by hand in clay to resemble a kid's bedroom. Behind the door we hear
+    parents arguing, and our goal, as a child, is to mute this argument by playing with
+    our toys.
+  </p>
+  <p>
+    Each interactable toy has a sound attached to it, so that when we keep on playing we
+    create a musical composition that allows us to again take control in our safe space
+    over the world we experience.
+  </p>
+  <p>
+    Toys are "protectors" or "guardians" of imaginary reality that help kids develop
+    creativity and a sense of safety. This project opens up a conversation about dealing
+    with trauma that can be caused by being abandoned by one or both parents, or dealing
+    with parents' conflicts while growing up.
+  </p>
+
+  <Fragment slot="gallery">
+    <img src="/portfolio/echoes/echoes-1.jpg" alt="The clay diorama model and VR headset setup" />
+    <img src="/portfolio/echoes/echoes-2.jpg" alt="In-game view of the sculpted bedroom with toys" />
+    <img src="/portfolio/echoes/echoes-3.jpg" alt="FAMILY building blocks in the VR scene" />
+    <img src="/portfolio/echoes/echoes-4.jpg" alt="Toy shelf with xylophone in the VR bedroom" />
+  </Fragment>
+
+</ProjectPage>

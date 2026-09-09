@@ -1,0 +1,69 @@
+---
+/* ============================================================
+   roots.astro   (a PAGE — lives in src/pages/portfolio/)
+
+   This is the Roots Film Festival project page. It feeds
+   content into the reusable ProjectPage layout.
+
+   URL: /portfolio/roots  (matches the card link in your listing)
+
+   To make the OTHER four project pages later, copy this file,
+   rename it (e.g. irdeto.astro), and swap the content. The
+   layout stays identical.
+
+   IMAGES: put the files in public/portfolio/roots/ and the
+   paths below will work. Names are placeholders — rename to
+   match your real files (or rename your files to match these).
+   ============================================================ */
+
+import ProjectPage from '../../layouts/ProjectPage.astro';
+---
+
+<ProjectPage
+  pageTitle="Roots Film Festival — Paulina Cywoniuk"
+  pageDescription="Visual identity for the ROOTS Film Festival at Filmhuis Den Haag."
+
+  logo="/portfolio/roots/roots-logo.png
+  "
+  logoAlt="ROOTS Film Festival logo"
+
+  title="Roots Film Festival"
+  subtitle="Designing Visual Identity for a Local Film Festival"
+
+  headerImage="/portfolio/roots/roots-header.png"
+  headerAlt="ROOTS Film Festival banner on a building facade"
+
+  keywords={["Graphic Design", "Visual Identity", "Team", "3 months"]}
+>
+
+  <!-- DESCRIPTION (default slot). Your real text, in paragraphs. -->
+  <p>
+    "ROOTS" is a film festival in The Hague organised by the Filmhuis.
+    This film event provides a platform for filmmakers from The Hague and
+    fosters connections among local filmmakers, contributing to a vibrant
+    and positive film culture in the city.
+  </p>
+  <p>
+    Together with a team of other students, I was commissioned to design a
+    visual identity for it. The commission included the logo, posters and
+    banners, flags, tote bags, coasters, Instagram marketing posts, big-screen
+    images and everything the festival needed. Personally, I worked on the
+    digital deliverables, such as the website and mail header.
+  </p>
+  <p>
+    As a team, we collaborated closely to develop the entire graphic identity
+    from the ground up, ensuring the festival's look and feel were both
+    engaging and consistent across all media. The goal was not only to capture
+    the essence of the festival but also to create a visual experience that
+    would resonate with the local film community.
+  </p>
+
+  <!-- GALLERY (named slot). Your 4 mockup images. -->
+  <Fragment slot="gallery">
+    <img src="/portfolio/roots/roots-1.png"  />
+    <img src="/portfolio/roots/roots-2.png"  />
+    <img src="/portfolio/roots/roots-3.jpg"  />
+    <img src="/portfolio/roots/roots-4.png"  />
+  </Fragment>
+
+</ProjectPage>

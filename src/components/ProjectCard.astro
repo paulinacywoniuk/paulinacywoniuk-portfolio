@@ -1,0 +1,138 @@
+---
+/* ============================================================
+   ProjectCard.astro
+
+   One project in the portfolio listing: a big title above an
+   image, the WHOLE thing a single clickable link.
+
+   LAYOUT — CENTERED:
+     - Title centered above the image.
+     - Image centered in the page column, capped at a max width
+       so there's equal breathing room on both sides.
+     - Landscape via aspect-ratio.
+     - Gap below each card: 184px -> clamp.
+
+   All KNOBS are labelled.
+
+   TITLE IS FLEXIBLE: pass EITHER titleText OR titleSvg.
+   ============================================================ */
+
+const {
+  href,
+  image,
+  imageAlt = '',
+
+  // --- Title: pass EITHER titleText OR titleSvg ---
+  titleText,
+  titleSvg,
+  titleSvgAlt = '',
+
+  // --- Optional per-project styling knobs ---
+  titleFont = 'var(--font-display)',
+  titleColor = 'var(--color-text)',
+} = Astro.props;
+---
+
+<a href={href} class="project-card">
+
+  <!-- TITLE (centered above the image) -->
+  {titleSvg ? (
+    <img src={titleSvg} alt={titleSvgAlt} class="project-title-svg" />
+  ) : (
+    <h2
+      class="project-title-text"
+      style={`font-family: ${titleFont}; color: ${titleColor};`}
+    >
+      {titleText}
+    </h2>
+  )}
+
+  <!-- IMAGE (centered in the column) -->
+  <div class="project-image-wrap">
+    <img src={image} alt={imageAlt} class="project-image" />
+  </div>
+
+</a>
+
+<style>
+  /* ============================================================
+     THE CARD — centered contents
+     ============================================================ */
+  .project-card {
+    /* Flexbox centering: stack children and center them horizontally. */
+    display: flex;
+    flex-direction: column;
+    align-items: center;            /* <-- this centers title + image */
+
+    text-decoration: none;
+    color: inherit;
+
+    /* Spacing between projects. KNOB: the clamp values. */
+    margin-bottom: clamp(4rem, 12.8vw, 184px);
+  }
+
+  .project-card:hover {
+    color: inherit;
+  }
+
+  /* ============================================================
+     TITLE — centered
+     ============================================================ */
+  .project-title-text {
+    font-size: clamp(2rem, 6vw, 4rem);   /* KNOB: title size */
+    line-height: 1.05;
+    margin-bottom: clamp(1rem, 2.5vw, 1.75rem);
+    text-align: center;                  /* center the text itself */
+  }
+
+  .project-title-svg {
+    height: clamp(2.5rem, 7vw, 5rem);    /* KNOB: SVG title height */
+    width: auto;
+    margin-bottom: clamp(1rem, 2.5vw, 1.75rem);
+  }
+
+  /* ============================================================
+     IMAGE — centered, capped width
+
+       width: 100% up to a max, then centered by align-items above.
+       max-width KNOB controls how wide the image gets before it
+       stops growing and just centers with space on both sides.
+     ============================================================ */
+  .project-image-wrap {
+    width: 100%;
+    max-width: 900px;                    /* KNOB: how wide the image can get */
+    aspect-ratio: 953 / 535;             /* landscape; height derived */
+
+    border-radius: 16px;                 /* KNOB: roundness */
+    overflow: hidden;
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.08),
+      0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .project-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;                   /* KNOB: 'contain' would letterbox instead */
+    display: block;
+    transition: transform 0.4s ease;
+  }
+
+  /* ============================================================
+     HOVER — gentle zoom, only on hover-capable devices
+     ============================================================ */
+  @media (hover: hover) {
+    .project-card:hover .project-image {
+      transform: scale(1.03);            /* KNOB: zoom amount */
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project-image {
+      transition: none;
+    }
+    .project-card:hover .project-image {
+      transform: none;
+    }
+  }
+</style>

@@ -1,50 +1,366 @@
 ---
-/* Echoes of Abandonment — DESIGN entry.  URL: /portfolio/echoes-design
-   Images go in public/portfolio/echoes/
-   Plain-text title for now (may switch to Dreaming Out Loud SVG later). */
-import ProjectPage from '../../layouts/ProjectPage.astro';
+/* ============================================================
+   echoes-design.astro   (PAGE — src/pages/portfolio/)
+   URL: /portfolio/echoes-design
+
+   UX CASE STUDY — custom standalone page (NOT ProjectPage).
+   Uses BaseLayout for nav/head/footer; all content sits inside
+   one width-constrained .echoes container so margins match the
+   rest of the site.
+
+   ORDER (per Paulina's spec):
+    1  logo + title + subtitle
+    2  header image
+    3  keywords
+    4  project description
+    5  video
+    6  THE PROBLEM   (heading left | purple rule | body right, vertically centered)
+    7  centered paragraph
+    8  conditions image (echoes-2)
+    9  THE APPROACH   (same two-column format) + centered paragraph under
+    10 player+phone image (echoes-3)
+    11 THE FINDINGS   (same two-column format)
+    12 centered paragraph (findings detail + research link)
+    13 VR players image (echoes-4)
+
+   Copy proofread from Paulina's message.
+   ============================================================ */
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
-<ProjectPage
-  pageTitle="Echoes of Abandonment — Paulina Cywoniuk"
-  pageDescription="BA graduation project — a VR interactive storytelling experience about a child coping with their parents' divorce."
-
-  logo="/portfolio/echoes/echoes-logo.svg
-  "
-  logoAlt="ROOTS Film Festival logo"
-  title="Echoes of Abandonment"
-  subtitle="Interactive Storytelling VR Experience and UX Research Project"
-
-  headerImage="/portfolio/echoes/echoes-header.png"
-  headerAlt="Player in VR headset interacting with a hand-sculpted clay bedroom"
-
-  keywords={["VR", "Unity", "Solo", "4 months"]}
+<BaseLayout
+  title="Echoes of Abandonment — UX Case Study — Paulina Cywoniuk"
+  description="A UX case study: marking interactable objects in a narrative VR experience without breaking immersion."
 >
+  <article class="echoes">
 
-  <p>
-    This is a Virtual Reality interactive storytelling experience about a child who is
-    dealing with their parents divorcing. By putting on VR goggles we are placed in a
-    world sculpted by hand in clay to resemble a kid's bedroom. Behind the door we hear
-    parents arguing, and our goal, as a child, is to mute this argument by playing with
-    our toys.
-  </p>
-  <p>
-    Each interactable toy has a sound attached to it, so that when we keep on playing we
-    create a musical composition that allows us to again take control in our safe space
-    over the world we experience.
-  </p>
-  <p>
-    Toys are "protectors" or "guardians" of imaginary reality that help kids develop
-    creativity and a sense of safety. This project opens up a conversation about dealing
-    with trauma that can be caused by being abandoned by one or both parents, or dealing
-    with parents' conflicts while growing up.
-  </p>
+    <!-- 1. LOCKUP: logo + title + subtitle -->
+    <header class="lockup">
+      <img src="/portfolio/echoes/echoes-logo.svg" alt="Echoes of Abandonment logo" class="lockup-logo" />
+      <div class="lockup-text">
+        <h1 class="lockup-title">Echoes of Abandonment</h1>
+        <p class="lockup-subtitle">Interactive Storytelling VR Experience and UX Research Project</p>
+      </div>
+    </header>
 
-  <Fragment slot="gallery">
-    <img src="/portfolio/echoes/echoes-1.jpg" alt="The clay diorama model and VR headset setup" />
-    <img src="/portfolio/echoes/echoes-2.jpg" alt="In-game view of the sculpted bedroom with toys" />
-    <img src="/portfolio/echoes/echoes-3.jpg" alt="FAMILY building blocks in the VR scene" />
-    <img src="/portfolio/echoes/echoes-4.jpg" alt="Toy shelf with xylophone in the VR bedroom" />
-  </Fragment>
+    <!-- 2. HEADER IMAGE -->
+    <div class="media">
+      <img src="/portfolio/echoes/echoes-header.png" alt="Player in a VR headset interacting with a hand-sculpted clay bedroom" />
+    </div>
 
-</ProjectPage>
+    <!-- 3. KEYWORDS -->
+    <div class="pill-bar">
+      <span class="pill">VR</span>
+      <span class="pill">Unity</span>
+      <span class="pill">Solo</span>
+      <span class="pill">4 months</span>
+    </div>
+
+    <!-- 4. PROJECT DESCRIPTION -->
+    <div class="text-column">
+      <p>
+        This is a Virtual Reality interactive storytelling experience about a child who is
+        dealing with their parents divorcing. By putting on VR goggles we are placed in a
+        world sculpted by hand in clay to resemble a kid's bedroom. Behind the door we hear
+        parents arguing, and our goal, as a child, is to mute this argument by playing with
+        our toys.
+      </p>
+      <p>
+        Each interactable toy has a sound attached to it, so that when we keep on playing we
+        create a musical composition that allows us to again take control in our safe space
+        over the world we experience.
+      </p>
+      <p>
+        Toys are "protectors" or "guardians" of imaginary reality that help kids develop
+        creativity and a sense of safety. This project opens up a conversation about dealing
+        with trauma that can be caused by being abandoned by one or both parents, or dealing
+        with parents' conflicts while growing up.
+      </p>
+    </div>
+
+    <!-- 5. VIDEO -->
+    <div class="video-embed">
+      <iframe
+        src="https://www.youtube.com/embed/zE0qHiv2KMg"
+        title="Echoes of Abandonment — gameplay"
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <!-- 6. THE PROBLEM -->
+    <section class="case-section">
+      <h2 class="case-heading">The Problem</h2>
+      <div class="case-body">
+        <p>
+          Echoes of Abandonment was presented at the KABK Graduation Show in 2024, where
+          hundreds of visitors were experiencing it. I noticed that
+          <strong>to some players it wasn't as intuitive with what toys they could interact
+          with.</strong> Watching them play became a real usability study, and it surfaced a
+          problem I hadn't designed for nor did I find academic literature that could solve
+          this problem for me. I've decided to cover the research gap and move with this
+          project from the design piece to a research proposal in the Master's of Game
+          Technology program.
+        </p>
+      </div>
+    </section>
+
+    <!-- 7. CENTERED PARAGRAPH -->
+    <div class="text-column">
+      <p>
+        The interaction was designed quite straightforward: discover the toys, and through
+        playing with them, quiet the argument behind the door. For a portion of players it
+        wasn't intuitive which objects were interactive. They'd reach for scenery, miss the
+        toys, or hesitate, unsure what the world was inviting them to do. In UX terms, the
+        objects' affordances weren't reading clearly. A research question emerged: how should
+        you mark an interactive object in VR without shattering the immersion the story
+        depends on?
+      </p>
+    </div>
+
+    <!-- 8. CONDITIONS IMAGE -->
+    <div class="media">
+      <img src="/portfolio/echoes/echoes-2.png" alt="The two marker conditions from the study: diegetic shader and non-diegetic exclamation icons" />
+    </div>
+
+    <!-- 9. THE APPROACH -->
+    <section class="case-section">
+      <h2 class="case-heading">The Approach</h2>
+      <div class="case-body">
+        <p>
+          To answer the question rigorously rather than by intuition, I designed a
+          <strong>between-subjects experiment</strong> with 35 participants comparing three
+          ways of marking interactive objects known to games UX research:
+        </p>
+        <ul>
+          <li><strong>Diegetic markers:</strong> cues that live inside the story world (a subtle brightness shader on interactive toys), so nothing about them breaks the fiction.</li>
+          <li><strong>Non-diegetic markers:</strong> cues layered on top of the world (a floating exclamation-mark icon), clearer as a signal but foreign to the fiction.</li>
+          <li><strong>A control group:</strong> no markers at all.</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="text-column">
+      <p>
+        I measured narrative immersion using two academic tools — the Immersion Experience
+        Questionnaire (short form) and the Narrative Engagement Scale, plus custom questions
+        written for this study's specific question. Alongside the numbers, I ran observations
+        of each playthrough and informal interviews, so I'd have the qualitative "why" behind
+        the quantitative "what."
+      </p>
+    </div>
+
+    <!-- 10. PLAYER + PHONE IMAGE -->
+    <div class="media">
+      <img src="/portfolio/echoes/echoes-3.jpg" alt="A participant playing while the in-game view is shown on a phone" />
+    </div>
+
+    <!-- 11. THE FINDINGS -->
+    <section class="case-section">
+      <h2 class="case-heading">The Findings</h2>
+      <div class="case-body">
+        <p>
+          The headline result failed to reject the null hypothesis. Statistical analysis in
+          SPSS (ANOVA and Kruskal-Wallis) showed no significant difference in narrative
+          immersion between the three conditions with effect sizes below η² = .02. Marker
+          design, on its own, did not measurably move immersion in either direction.
+        </p>
+      </div>
+    </section>
+
+    <!-- 12. CENTERED PARAGRAPH (findings detail + research link) -->
+    <div class="text-column">
+      <p>
+        For a moment that read like failure. However, it was the most useful thing the study
+        could have told me, once I looked at the qualitative data for why:
+      </p>
+      <p>
+        <strong>1. Non-diegetic markers were actually the clearer signifiers.</strong> In the
+        open responses, participants, especially less experienced gamers, found the
+        exclamation-mark icon easier to read as "you can use this." The subtle diegetic shader
+        divided people: some loved its invisibility, others simply didn't notice it. This
+        directly addresses my original grad-show problem: the "immersion-breaking" marker was
+        the one that solved the affordance issue, and it didn't measurably cost immersion to
+        do so.
+      </p>
+      <p>
+        <strong>2. Sound design was the real immersion-breaker.</strong> Across every
+        condition, participants pointed at the audio, not the markers, as the thing pulling
+        them out of the experience. They complained about the layered sound of the musical
+        toys and parent argument being too distracting to realise what the argument was about
+        — despite the goal of the game being not to listen to the argument and mute it
+        completely through playing music. The variable I was studying turned out to be less
+        influential than a variable I wasn't. That's the study's most important design lesson:
+        auditory UI deserves the same scrutiny as visual UI in VR, and I'd designed the sound
+        with far less rigor than the markers.
+      </p>
+      <p class="case-note">
+        <em>Make sure to read a summary of my study in my <a href="/research">research section</a>,
+        where you can also find my full paper and publication.</em>
+      </p>
+    </div>
+
+    <!-- 13. VR PLAYERS IMAGE -->
+    <div class="media">
+      <img src="/portfolio/echoes/echoes-4.jpg" alt="VR players in the Echoes of Abandonment environment" />
+    </div>
+
+    <a href="/portfolio" class="back-link">← Back to portfolio</a>
+
+  </article>
+</BaseLayout>
+
+<style>
+  /* ============================================================
+     CONTAINER — same width rules as every other page.
+     ============================================================ */
+  .echoes {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: clamp(2rem, 6vw, 4rem) var(--space-page);
+  }
+
+  /* ---------- 1. LOCKUP (logo left, title+subtitle right) ---------- */
+  .lockup {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  .lockup-logo {
+    width: clamp(80px, 12vw, 150px);   /* KNOB: logo size */
+    height: auto;
+    flex-shrink: 0;
+  }
+
+  .lockup-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    color: var(--color-text);
+  }
+
+  .lockup-subtitle {
+    font-family: var(--font-subtitle);
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    color: var(--color-text-muted);
+    margin-top: 0.4rem;
+  }
+
+  /* ---------- IMAGES (full width of container) ---------- */
+  .media {
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    margin: clamp(2rem, 5vw, 3.5rem) 0;
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.08),
+      0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .media img { width: 100%; height: auto; display: block; }
+
+  /* ---------- KEYWORDS ---------- */
+  .pill-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(1rem, 3vw, 2.5rem);
+    padding: clamp(0.75rem, 2vw, 1.1rem) clamp(1.5rem, 4vw, 2.5rem);
+    border: 1.5px solid var(--color-purple);
+    border-radius: 999px;
+    margin: clamp(2rem, 5vw, 3rem) auto;
+    width: fit-content;
+    max-width: 100%;
+  }
+
+  .pill {
+    font-family: var(--font-body);
+    font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+    color: var(--color-text);
+    white-space: nowrap;
+  }
+
+  /* ---------- CENTERED TEXT COLUMNS (points 4, 7, 9-under, 12) ---------- */
+  .text-column {
+    max-width: 72ch;
+    margin: 0 auto clamp(2rem, 5vw, 3rem);
+    font-size: clamp(1rem, 1.7vw, 1.1rem);
+    line-height: 1.7;
+  }
+
+  .text-column p { margin-bottom: 1.1rem; }
+  .text-column p:last-child { margin-bottom: 0; }
+
+  .case-note { margin-top: 1.5rem !important; color: var(--color-text-muted); }
+  .case-note a { color: var(--color-purple); border-bottom: 1px solid var(--color-purple); }
+
+  /* ---------- VIDEO ---------- */
+  .video-embed {
+    aspect-ratio: 16 / 9;
+    border-radius: 16px;
+    overflow: hidden;
+    margin: clamp(2rem, 5vw, 3.5rem) 0;
+    box-shadow:
+      0 4px 16px rgba(0, 0, 0, 0.08),
+      0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .video-embed iframe { width: 100%; height: 100%; border: none; display: block; }
+
+  /* ============================================================
+     CASE SECTIONS (6, 9, 11) — heading LEFT | purple rule | body RIGHT
+     Heading is VERTICALLY CENTERED against the body (align-items: center).
+     ============================================================ */
+  .case-section {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;   /* KNOB: heading vs body width balance */
+    gap: clamp(1.5rem, 4vw, 3rem);
+    align-items: center;                 /* heading centered to middle of body */
+    margin: clamp(2.5rem, 6vw, 4rem) auto;
+    max-width: 950px;
+  }
+
+  .case-heading {
+    font-size: clamp(1.75rem, 4vw, 3rem);   /* KNOB */
+    color: var(--color-text);
+    line-height: 1.1;
+    text-align: left;
+  }
+
+  .case-body {
+    border-left: 3px solid var(--color-purple);   /* THE PURPLE DIVIDER. KNOB */
+    padding-left: clamp(1.25rem, 3vw, 2rem);
+    font-size: clamp(1rem, 1.6vw, 1.1rem);
+    line-height: 1.7;
+  }
+
+  .case-body p { margin-bottom: 1rem; }
+  .case-body p:last-child { margin-bottom: 0; }
+
+  .case-body ul { list-style: none; padding: 0; margin: 0.75rem 0 0; }
+  .case-body li { position: relative; padding-left: 1.25rem; margin-bottom: 0.6rem; }
+  .case-body li::before {
+    content: "•"; position: absolute; left: 0;
+    color: var(--color-purple); font-weight: bold;
+  }
+
+  /* ---------- BACK LINK ---------- */
+  .back-link {
+    display: inline-block;
+    margin-top: 2rem;
+    font-size: 1rem;
+    color: var(--color-blue);
+  }
+
+  /* ============================================================
+     MOBILE — lockup and case sections stack vertically.
+     ============================================================ */
+  @media (max-width: 640px) {
+    .lockup { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .case-section { grid-template-columns: 1fr; gap: 1rem; align-items: start; }
+  }
+</style>

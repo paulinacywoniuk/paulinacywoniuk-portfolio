@@ -203,18 +203,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     margin-bottom: 1.5rem;
   }
 
-    .research-title {
-    font-size: clamp(2rem, 5vw, 3.5rem);   /* UNCHANGED — same size as always */
+.research-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
     line-height: 1.1;
     margin-bottom: 2rem;
-margin-left: -2.5rem;
-/* align-items: center; */
-    /* Wider column than the body text.
-       The hero is 800px; this lets the title go wider.
-       KNOB: raise 1050px for wider (fewer lines),
-             lower for narrower (more lines). */
-    width: 810px;
-    max-width: 50vw;    /* safety: never wider than 90% of screen (mobile) */
+
+    /* DESKTOP: title hangs a little left of the text column
+       and is allowed to be wider than the 800px body text. */
+    margin-left: -2.5rem;    /* KNOB: how far it hangs left */
+    width: 810px;            /* KNOB: title width (more = fewer lines) */
+    max-width: 50vw;         /* safety cap: never wider than half the screen */
+  }@media (max-width: 900px) {
+    .research-title {
+      margin-left: 0;
+      width: auto;
+      max-width: none;
+    }
   }
 
   .research-title em {

@@ -223,11 +223,38 @@ const {
      MOBILE — stack the lockup vertically so logo + title don't
      cramp on narrow screens.
      ============================================================ */
+   /* ============================================================
+     MOBILE — logo + title share the first row, subtitle goes
+     underneath at full width.
+     ============================================================ */
   @media (max-width: 640px) {
     .lockup {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
+      display: grid;
+      grid-template-columns: auto 1fr;      /* logo column hugs the logo, title takes the rest */
+      grid-template-areas:
+        "logo     title"
+        "subtitle subtitle";
+      align-items: center;                  /* logo vertically centered next to the title */
+      column-gap: 0.75rem;                  /* KNOB: space between logo and title */
+      row-gap: 0.5rem;
+    }
+
+    /* "Ignore this box": its children join the grid directly */
+    .lockup-text {
+      display: contents;
+    }
+
+    .lockup-logo {
+      grid-area: logo;
+      width: 3.5rem;                        /* KNOB: mobile logo size */
+    }
+
+    .lockup-title {
+      grid-area: title;
+    }
+
+    .lockup-subtitle {
+      grid-area: subtitle;
     }
   }
 </style>

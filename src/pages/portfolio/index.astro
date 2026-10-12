@@ -1,71 +1,142 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
+import TiltCard from '../../components/TiltCard.astro';
 
 /* ============================================================
-   THE FIVE PROJECTS — this is your content, as data.
+   LAYOUT SWITCH — for experimenting.
+     'stack' = colored tilted cards overlapping in one row
+     'list'  = Echoes on top, then one project per row
+     'grid'  = Echoes on top, then 2 per row
+   Change the word, save, look. Nothing else needs to change.
+   ============================================================ */
+let layout = 'stack';
+let cardStyle = 'glass';
 
-   To add or edit a project later, you edit THIS array. You do
-   not touch layout code. Each project is an object with the
-   props ProjectCard understands.
+/* ============================================================
+   YOUR PROJECTS — one object per project.
 
-   Pass EITHER titleText (for live-font titles) OR titleSvg
-   (for outlined-font titles like Echoes). See ProjectCard.astro
-   for the full list of options.
+   image  the cover photo (used by the 'grid' and 'list' layouts)
+   logo   the project logo (used on the 'stack' cards)
 
-   NOTE ON IMAGES: the paths below point at files in your
-   `public/` folder. Put the images there (e.g.
-   public/portfolio/roots-cover.jpg) and the paths will work.
-   Images that don't exist yet will show as broken — that's
-   expected until you add them. I've left placeholders so you
-   can see the layout and swap in real files as you make them.
+   The `card: {...}` part is only used by the 'stack' layout:
+     title      short title shown on the colored card
+     color      card background (any brand color variable)
+     textColor  title color (white by default, only set it to override)
+     logoBg     color of the tile behind the logo (white by default)
+     tilt       rotation in degrees (negative = tilts left)
+     shift      up/down offset: '10%' = lower, '-5%' = higher
+     featured   true = slightly bigger
+     layer      stacking order: higher number sits on top of its
+                neighbours (hover always brings a card to the front)
+     titleAlign 'left' or 'right': put the title on the side of the
+                card that ISN'T covered by a neighbour
    ============================================================ */
 
-const projects = [
-  {
-    href: '/portfolio/roots',
-    image: '/portfolio/roots-cover.png',
-    imageAlt: 'ROOTS Film Festival visual identity — festival banners on a building',
-    titleText: 'Roots Film Festival',
-    // Roots title font is still TBD (open-source display face).
-    // For now it uses your display font. We'll set titleFont here
-    // once you pick one, e.g. titleFont: "'Fraunces', serif".
+const echoes = {
+  href: '/portfolio/echoes-design',
+  image: '/portfolio/echoes-cover.png',
+  logo: '/portfolio/echoes/echoes-logo.svg',
+  logoAlt: 'Echoes of Abandonment logo',
+  imageAlt: 'Echoes of Abandonment — VR experience with a hand-sculpted clay bedroom',
+  titleText: 'Echoes of Abandonment',
+  card: {
+    title: 'Echoes of Abandonment',
+    color: 'var(--color-purple)',
+    tilt: 2,
+    shift: '-6%',
+    featured: true,
+    layer: 5,           /* top of the pile */
+logoSize: '160%',  
   },
-    {
-    href: '/portfolio/echoes-design',
-    image: '/portfolio/echoes-cover.png',
-    imageAlt: 'Echoes of Abandonment — VR experience with a hand-sculpted clay bedroom',
-    titleText: 'Echoes of Abandonment',
+};
+
+const irdeto = {
+  href: '/portfolio/irdeto',
+  image: '/portfolio/irdeto-cover.png',
+  logo: '/portfolio/irdeto/irdeto-logo.png',
+  logoAlt: 'Irdeto logo',
+  imageAlt: 'Irdeto — visual design work',
+  titleText: 'Visual Design — Irdeto',
+  card: {
+    title: 'Irdeto',
+    color: 'var(--color-blue)',
+    tilt: -7,
+    shift: '4%',
+    layer: 2,
+    logoSize: '150%',
   },
-  {
-    href: '/portfolio/nl12-vr',
-    image: '/portfolio/nl12-cover.png',
-    imageAlt: 'NL12 internship — VR production work',
-    titleText: 'NL12 — VR Production',
+};
+
+const roots = {
+  href: '/portfolio/roots',
+  image: '/portfolio/roots-cover.png',
+  logo: '/portfolio/roots/roots-cover-horizontal.png',
+  logoAlt: 'ROOTS Film Festival logo',
+  imageAlt: 'ROOTS Film Festival visual identity — festival banners on a building',
+  titleText: 'Roots Film Festival',
+  card: {
+    title: 'Roots Film Festival',
+    color: 'var(--color-orange)',
+    tilt: -3,
+    shift: '16%',
+    layer: 3,
+    logoSize: '160%',
   },
-  {
-    href: '/portfolio/craftiplays',
-    image: '/portfolio/craftiplays-cover.jpg',
-    imageAlt: 'Lands of Magic — mobile game asset illustrations',
-    titleText: 'Lands of Magic — Game Assets',
+};
+
+const craftiplays = {
+  href: '/portfolio/craftiplays',
+  image: '/portfolio/craftiplays-cover.jpg',
+  logo: '/portfolio/craftiplays/craftiplays-logo.png',
+  logoAlt: 'CraftiPlays logo',
+  imageAlt: 'Lands of Magic — mobile game asset illustrations',
+  titleText: 'Lands of Magic — Game Assets',
+  card: {
+    title: 'Lands of Magic',
+    color: 'var(--color-cyan)',      /* note: this variable is your yellow */
+    tilt: 4,
+    shift: '20%',
+    layer: 3,
+    titleAlign: 'right',   /* Echoes covers this card's left side */
+    logoSize: '100%',
   },
-  {
-    href: '/portfolio/irdeto',
-    image: '/portfolio/irdeto-cover.png',
-    imageAlt: 'Irdeto — visual design work',
-    titleText: 'Visual Design — Irdeto',
-    // Irdeto uses Montserrat (open-source, safe). We'll wire the
-    // font import + set titleFont when we build this card:
-    // titleFont: "'Montserrat', sans-serif",
+};
+
+const nl12 = {
+  href: '/portfolio/nl12-vr',
+  image: '/portfolio/nl12-cover.png',
+  logo: '/portfolio/nl12/nl12-logo.jpg',
+  logoAlt: 'NL12 lab logo',
+  imageAlt: 'NL12 internship — VR production work',
+  titleText: 'NL12 — VR Production',
+  card: {
+    title: 'NL12 VR Production',
+    color: 'var(--color-lime)',
+    tilt: 6,
+    shift: '2%',
+    layer: 1,           /* bottom of the pile */
+    logoBg: '#000000',  /* the NL12 logo file has a black background */
+    titleAlign: 'right',   /* Lands of Magic covers this card's left side */
+    logoSize: '100%',
   },
-];
+};
+
+/* ORDER — left to right for 'stack', top to bottom for the others */
+const stack = [irdeto, roots, echoes, craftiplays, nl12];
+
+const featured = echoes;
+const projects = [irdeto, roots, craftiplays, nl12];
+
+const containerClass = layout === 'list' ? 'project-list' : 'project-grid';
+const cardSize = layout === 'list' ? 'row' : 'small';
 ---
 
 <BaseLayout
   title="Portfolio — Paulina Cywoniuk"
   description="Selected design and research projects by Paulina Cywoniuk."
 >
-  <section class="portfolio">
+  <section class:list={['portfolio', { 'portfolio--glass': layout === 'stack' && cardStyle === 'glass' }]}>
 
     <header class="portfolio-header">
       <h1 class="portfolio-heading">Portfolio</h1>
@@ -74,18 +145,36 @@ const projects = [
       </p>
     </header>
 
-    <div class="project-list">
-      {projects.map((project) => (
-        <ProjectCard {...project} />
-      ))}
-    </div>
+    {layout === 'stack' ? (
+
+      <div class="project-stack">
+        {stack.map((project) => (
+          <TiltCard {...project} variant={cardStyle} />
+        ))}
+      </div>
+
+    ) : (
+
+      <Fragment>
+        <div class="project-featured">
+          <ProjectCard {...featured} size="featured" />
+        </div>
+
+        <div class={containerClass}>
+          {projects.map((project) => (
+            <ProjectCard {...project} size={cardSize} />
+          ))}
+        </div>
+      </Fragment>
+
+    )}
 
   </section>
 </BaseLayout>
 
 <style>
   .portfolio {
-    max-width: var(--max-width);
+    max-width: var(--max-width);   /* 1200px, set in global.css */
     margin: 0 auto;
     padding: clamp(2rem, 6vw, 4rem) var(--space-page);
   }
@@ -106,10 +195,77 @@ const projects = [
     max-width: 50ch;
   }
 
-  /* The list itself is just the cards stacked. Each card handles
-     its own bottom spacing (margin-bottom in ProjectCard), so
-     this container stays simple. */
+  /* ============================================================
+     STACK — the row of overlapping tilted cards.
+     Width x 5 cards minus overlap x 4 should be about 100%:
+     24% x 5 - 5% x 4 = 100%. Change one, adjust the other.
+     ============================================================ */
+  .project-stack {
+    --card-width: 24%;              /* KNOB: card width */
+    --card-overlap: 5%;             /* KNOB: how far cards slide under each other */
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    /* Room around the stack, because tilted + shifted cards poke out
+       of their boxes (transforms don't take up layout space). */
+    padding-block: clamp(1rem, 3vw, 3rem) clamp(4rem, 9vw, 8rem);  /* KNOB */
+  }
+  /* ============================================================
+     PLACEHOLDER BACKGROUND for the glass cards.
+     Only switches on when cardStyle is 'glass'. ":has()" asks the
+     browser: "does the page contain a .portfolio--glass section?"
+     and colors the whole page body if so. :global() is needed
+     because <body> lives in BaseLayout, not in this file.
+
+     Soft blobs of brand color: each radial-gradient is one blob,
+     "at X% Y%" is where its center sits, the last % is its size.
+     Swap the whole thing for one color when you've decided,
+     e.g.  background: var(--color-blue);
+     ============================================================ */
+  :global(body:has(.portfolio--glass)) {
+    background:
+      radial-gradient(circle at 15% 95%, var(--color-orange) 0%, transparent 35%),
+      radial-gradient(circle at 45% 85%, var(--color-purple) 0%, transparent 35%),
+      radial-gradient(circle at 70% 45%, var(--color-blue) 0%, transparent 30%),
+      radial-gradient(circle at 90% 80%, var(--color-lime) 0%, transparent 30%),
+      var(--color-bg);
+    background-attachment: fixed;   /* blobs stay put while you scroll */
+  }
+  @media (max-width: 720px) {
+    .project-stack {
+      flex-direction: column;
+      align-items: center;
+      padding-block: 1rem 3rem;
+    }
+  }
+
+  /* ============================================================
+     FEATURED / LIST / GRID — the earlier experiments
+     ============================================================ */
+  .project-featured {
+    max-width: 900px;
+    margin: 0 auto clamp(4rem, 10vw, 8rem);
+  }
+
   .project-list {
-    display: block;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .project-grid {
+    max-width: 900px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: clamp(1.5rem, 4vw, 3rem);
+    row-gap: clamp(3rem, 8vw, 6rem);
+  }
+
+  @media (max-width: 640px) {
+    .project-grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

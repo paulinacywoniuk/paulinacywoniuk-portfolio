@@ -1,0 +1,236 @@
+---
+/* ============================================================
+   TiltCard.astro
+
+   One project as a colored, tilted card: big title at the top,
+   cover image at the bottom. The whole card is one link.
+
+   Cards sit next to each other in a row and OVERLAP. How much
+   they overlap and how wide they are is set by the PAGE (the
+   .project-stack box in portfolio/index.astro), through two
+   CSS variables: --card-width and --card-overlap.
+
+   Everything about how ONE card looks (its color, tilt, height
+   offset, short title) comes from that project's `card: {...}`
+   settings in index.astro, so you never need to edit this file
+   to restyle a single card.
+   ============================================================ */
+
+const {
+  href,
+  image,
+  imageAlt = '',
+  logo,               // project logo; shown instead of `image` when set
+  logoAlt = '',
+  titleText,          // the full project title (fallback)
+  card = {},          // per-card settings, see index.astro
+  variant = 'color',
+} = Astro.props;
+
+const {
+  title = titleText,                    // short title shown on the card
+  color = 'var(--color-purple)',        // card background
+  textColor = '#FFFEF7',                // title color
+  tilt = 0,                             // rotation in degrees (negative = left)
+  shift = '0%',                         // up/down offset ('10%' = lower, '-5%' = higher)
+  featured = false,                     // true = a bit bigger
+  layer = 1,                            // stacking: higher number = on top of neighbours
+  titleAlign = 'left',                  // 'left' or 'right'
+  logoBg = 'transparent',
+  logoSize = '76%',                    // size of the logo within its container
+} = card;
+---
+<!-- The style="" line hands this card's settings to the CSS below
+     as variables (--card-color, --tilt...). -->
+<a
+  href={href}
+  class:list={['tilt-card', `tilt-card--${variant}`, { 'tilt-card--featured': featured }]}
+  style={`--card-color: ${color}; --card-text: ${textColor}; --tilt: ${tilt}deg; --shift: ${shift}; --layer: ${layer}; --title-align: ${titleAlign}; --logo-bg: ${logoBg}; --logo-size: ${logoSize};`}
+>
+  <h2 class="tilt-card-title">{title}</h2>
+
+  <!-- If the project has a logo, show it on a tile. Otherwise the cover image. -->
+  {logo ? (
+    <div class="tilt-card-image-wrap tilt-card-image-wrap--logo">
+      <img src={logo} alt={logoAlt} class="tilt-card-image" />
+    </div>
+  ) : (
+    <div class="tilt-card-image-wrap">
+      <img src={image} alt={imageAlt} class="tilt-card-image" />
+    </div>
+  )}
+</a>
+<style>
+  /* ============================================================
+     THE CARD
+     ============================================================ */
+  .tilt-card {
+    /* Size + overlap come from the page (with fallbacks) */
+    flex: 0 0 var(--card-width, 24%);
+    position: relative;               /* needed for z-index to work */
+    z-index: var(--layer);            /* set per card with `layer` in index.astro */
+
+    display: flex;
+    flex-direction: column;
+    aspect-ratio: 3 / 4;              /* KNOB: card shape (portrait) */
+    padding: clamp(0.9rem, 1.6vw, 1.4rem);  /* KNOB: inner padding */
+
+    background: var(--card-color);
+    border-radius: 14px;              /* KNOB: card roundness */
+    box-shadow:
+      0 10px 30px rgba(102, 107, 205, 0.12),
+      0 2px 6px rgba(107, 158, 221, 0.06);
+
+    text-decoration: none;
+
+    /* The tilt + height offset. Order matters: move first, then rotate. */
+    transform: translateY(var(--shift)) rotate(var(--tilt));
+    transition:
+      transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+      box-shadow 0.45s ease;
+  }
+
+  /* Every card except the first slides left under its neighbour.
+     "+" means "a tilt-card that comes right after another one". */
+  .tilt-card + .tilt-card {
+    margin-left: calc(var(--card-overlap, 5%) * -1);
+  }
+
+  /* Featured card: slightly bigger */
+  .tilt-card--featured {
+    transform: translateY(var(--shift)) rotate(var(--tilt)) scale(1.08);  /* KNOB: featured size */
+  }
+    /* ============================================================
+     GLASS VERSION (variant="glass")
+     Semi-transparent white + backdrop-filter, which blurs whatever
+     is BEHIND the card, including the cards underneath it. That
+     blur is what makes it read as frosted glass rather than just
+     a pale card, so it needs a colorful background to show off.
+     ============================================================ */
+  .tilt-card--glass {
+    background: rgba(255, 255, 255, 0.22);              /* KNOB: last number = how milky (0 to 1) */
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);  /* Safari needs this prefix */
+    backdrop-filter: blur(18px) saturate(1.4);          /* KNOB: blur amount */
+    border: 2px solid rgba(31, 26, 77, 0.7);            /* KNOB: the dark border */
+    box-shadow: 0 10px 30px rgba(71, 76, 210, 0.12);
+  }
+
+  /* White titles disappear on frosted glass, so glass cards use dark text */
+  .tilt-card--glass .tilt-card-title {
+    color: var(--color-text);                           /* KNOB: glass title color */
+    
+  }
+
+  /* ============================================================
+     TITLE
+     ============================================================ */
+  .tilt-card-title {
+    font-family: var(--font-display);           /* Gabarito, from global.css */
+    font-size: clamp(1.25rem, 2.8vw, 2.5rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    color: var(--card-text);
+    text-align: var(--title-align);   /* set per card with `titleAlign` */
+  }
+
+  /* ============================================================
+     IMAGE — pinned to the bottom of the card
+     ============================================================ */
+    .tilt-card-image-wrap {
+    margin-top: auto;
+    aspect-ratio: 4 / 3;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 10%;                 /* NEW — KNOB: bigger % = smaller logo */
+  }
+
+  .tilt-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;          /* was: cover — show the whole logo, never crop */
+    display: block;
+    transition: transform 0.45s ease;
+  }
+  /* LOGO TILE: a colored tile (logoBg) with the logo sitting inside it.
+     object-fit: contain = show the WHOLE logo, never crop it.
+     The padding is the breathing room around the logo. */
+  .tilt-card-image-wrap--logo {
+    background: var(--logo-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;                   /* KNOB: space around the logo */
+    min-height: 0; 
+  }
+
+  .tilt-card-image-wrap--logo .tilt-card-image {
+    width: var(--logo-size);
+    height: var(--logo-size);
+    max-width: none;        /* global.css caps every img at 100% wide; lift that cap here */
+    flex-shrink: 0;         /* keep the logo at its full size, even above 100% */
+    object-fit: contain;
+  }
+
+  /* ============================================================
+     HOVER (and keyboard focus): the card comes to the front,
+     lifts, half-straightens, and the image zooms like before.
+     ============================================================ */
+  @media (hover: hover) {
+    .tilt-card:hover {
+      z-index: 10;
+      transform: translateY(calc(var(--shift) - 4%))   /* KNOB: lift height */
+                 rotate(calc(var(--tilt) * 0.3))        /* KNOB: 0 = fully straight */
+                 scale(1.1);                            /* KNOB: hover size */
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .tilt-card:hover .tilt-card-image {
+      transform: scale(1.05);                           /* KNOB: image zoom */
+    }
+  }
+
+  .tilt-card:focus-visible {
+    z-index: 10;
+    outline: 3px solid var(--color-blue);
+    outline-offset: 4px;
+  }
+
+  /* ============================================================
+     PHONES: no overlap. Cards stack top to bottom, keep their
+     tilt, and zig-zag left/right. Featured card goes first.
+     ============================================================ */
+  @media (max-width: 720px) {
+    .tilt-card {
+      flex-basis: auto;
+      width: 82%;
+      transform: rotate(calc(var(--tilt) * 0.5));   /* half the tilt on small screens */
+    }
+
+    .tilt-card + .tilt-card {
+      margin-left: 0;
+      margin-top: -1.5rem;             /* KNOB: slight vertical overlap */
+    }
+
+    .tilt-card:nth-child(odd)  { align-self: flex-start; }
+    .tilt-card:nth-child(even) { align-self: flex-end; }
+
+    .tilt-card--featured {
+      order: -1;                       /* move to the top of the pile */
+      align-self: center;
+      transform: rotate(calc(var(--tilt) * 0.5));
+      margin-top: 0;
+    }
+
+    .tilt-card-title {
+      font-size: clamp(1.75rem, 8vw, 2.5rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tilt-card,
+    .tilt-card-image {
+      transition: none;
+    }
+  }
+</style>

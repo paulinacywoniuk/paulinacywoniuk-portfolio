@@ -1,0 +1,179 @@
+---
+/* ============================================================
+   BigSmall.astro — a BIG image next to a column with a SMALL
+   image and a colored text tile. The size difference is the
+   point: it tells visitors which image matters more.
+
+   <BigSmall
+     bigSrc="/portfolio/roots/roots-2.png"   bigAlt="..."
+     smallSrc="/portfolio/roots/roots-4.png" smallAlt="..."
+     heading="One line, on everything."
+   >
+     Banners, flags, posters, coasters...   ← tile text goes here
+   </BigSmall>
+
+   reverse={true} puts the big image on the RIGHT instead.
+
+   TILE LOOK — switch for ALL pages with the `tileStyle` default
+   below, or for one block with tileStyle="solid":
+     'glass' = frosted glass with a purple outline, over circles
+     'solid' = filled with the project's accent color
+   ============================================================ */
+const {
+  bigSrc, bigAlt = '',
+  smallSrc, smallAlt = '',
+  heading,                                // big words in the tile
+  // Colors come from the page's accent (set on ProjectPage).
+  // Pass these only to override ONE tile.
+  tileColor = 'var(--project-accent)',
+  tileTextColor = 'var(--project-accent-text)',
+  tileStyle = 'glass',                    // KNOB: 'glass' or 'solid' for every page
+  reverse = false,
+} = Astro.props;
+---
+
+<section
+  class:list={['big-small', { 'big-small--reverse': reverse }]}
+  style={`--tile-color: ${tileColor}; --tile-text: ${tileTextColor};`}
+>
+  {bigSrc ? (
+    <img src={bigSrc} alt={bigAlt} class="big" />
+  ) : (
+    <div class="big placeholder">[{bigAlt}]</div>
+  )}
+
+  <div class="side">
+    {smallSrc ? (
+      <img src={smallSrc} alt={smallAlt} class="small" />
+    ) : (
+      <div class="small placeholder">[{smallAlt}]</div>
+    )}
+
+    <div class:list={['tile-wrap', `tile-wrap--${tileStyle}`]}>
+      <!-- Decoration only: circles behind the glass -->
+      <div class="tile-circles" aria-hidden="true"></div>
+
+      <div class="tile">
+        {heading && <p class="tile-heading">{heading}</p>}
+        <div class="tile-text"><slot /></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  /* A row that wraps: on phones the side column drops below */
+  .big-small {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;                         /* KNOB: space between the pieces */
+  }
+
+  .big-small--reverse {
+    flex-direction: row-reverse;
+  }
+
+  .big {
+    flex: 2 1 32rem;                     /* KNOB: first number = how much wider the big one is */
+    min-width: 0;
+    min-height: 22rem;
+    align-self: stretch;                 /* same height as the side column, so the
+                                            bottoms line up (object-fit crops the photo) */
+    object-fit: cover;
+    display: block;
+    border-radius: 16px;
+  }
+
+  .side {
+    flex: 1 1 18rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .small {
+    width: 100%;
+    aspect-ratio: 4 / 3;                 /* KNOB: small image shape */
+    object-fit: cover;
+    display: block;
+    border-radius: 16px;
+  }
+
+  /* The wrapper fills the rest of the column; the tile fills the wrapper */
+  .tile-wrap {
+    flex: 1;
+    position: relative;
+    display: flex;
+  }
+
+  .tile {
+    flex: 1;
+    position: relative;                  /* sits on top of the circles */
+    border-radius: 16px;
+    background: var(--tile-color);
+    color: var(--tile-text);
+    padding: clamp(1.5rem, 3vw, 2rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;           /* text sits at the bottom of the tile */
+    gap: 0.75rem;
+  }
+
+  .tile-heading {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(1.6rem, 3vw, 2.1rem);   /* KNOB: tile heading size */
+    line-height: 1.05;
+    margin: 0;
+  }
+
+  .tile-text {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .tile-text :global(p) {
+    margin: 0;
+  }
+
+  /* ---------- SOLID tile: no circles ---------- */
+  .tile-wrap--solid .tile-circles {
+    display: none;
+  }
+
+  /* ---------- GLASS tile ----------
+     Same idea as the glass Statement: hard-edged circles behind
+     frosted glass. They peek out a little above and below the
+     tile, so those parts stay crisp while the rest goes soft. */
+  .tile-circles {
+    position: absolute;
+    inset: -1rem 0 -2.5rem 0;            /* KNOB: how far circles may peek (top, right, bottom, left) */
+
+    /* "circle 4.5rem" = radius, "at X Y" = center, measured inside
+       this box. calc(100% - 4.5rem) = 4.5rem in from that edge.
+       Both sit on the RIGHT, away from the text on the left.
+       KNOB: move, resize or recolor the circles here. */
+    background:
+      radial-gradient(circle 4.5rem at calc(100% - 5rem) calc(100% - 4.5rem), var(--project-accent) 99%, transparent 100%),
+      radial-gradient(circle 2.5rem at calc(100% - 3rem) 2.5rem, var(--color-purple) 99%, transparent 100%);
+  }
+
+  .tile-wrap--glass .tile {
+    background: rgba(255, 254, 247, 0.35);              /* KNOB: how milky (0 to 1) */
+    -webkit-backdrop-filter: blur(18px) saturate(1.3);  /* Safari needs this prefix */
+    backdrop-filter: blur(18px) saturate(1.3);          /* KNOB: blur amount */
+    border: 2px solid rgba(128, 35, 146, 0.6);          /* KNOB: outline = your purple at 60% */
+    color: var(--color-purple);                         /* KNOB: text color on glass */
+  }
+
+  .placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    border: 2px dashed var(--color-purple);
+    color: var(--color-purple);
+    text-align: center;
+  }
+</style>

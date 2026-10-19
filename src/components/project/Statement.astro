@@ -1,0 +1,121 @@
+---
+/* ============================================================
+   Statement.astro — one big sentence on a colored band that
+   runs edge to edge of the browser window.
+
+   <Statement>
+     The sentence that sums up the project.
+   </Statement>
+
+   TWO LOOKS — switch for ALL pages with the `variant` default
+   below, or for one page with <Statement variant="solid">:
+     'glass' = a full-width frosted glass band over colored circles
+     'solid' = a full-width colored band
+   ============================================================ */
+// Colors come from the page's accent (set on ProjectPage).
+// Pass bg / color only to override this one band.
+const {
+  variant = 'glass',                    // KNOB: 'glass' or 'solid' for every page
+  bg = 'var(--project-accent)',
+  color = 'var(--project-accent-text)',
+} = Astro.props;
+---
+
+<section
+  class:list={['statement', `statement--${variant}`]}
+  style={`--band: ${bg}; --band-text: ${color};`}
+>
+  <!-- Decoration only: the colored circles behind the glass -->
+  <div class="statement-circles" aria-hidden="true"></div>
+
+  <div class="statement-panel">
+    <p class="statement-text"><slot /></p>
+  </div>
+</section>
+
+<style>
+  /* ============================================================
+     SOLID — full-width colored band
+     ============================================================ */
+  .statement--solid {
+    background: var(--band);
+    padding-block: clamp(4rem, 9vw, 7rem);    /* KNOB: band height */
+
+    /* FULL-BLEED TRICK: the page column is max 1200px wide, but the
+       band should reach the window edges. A huge box-shadow in the
+       same color paints far left and right, and clip-path trims it
+       to exactly this band's height. Unlike "width: 100vw", this
+       never causes a sideways scrollbar. */
+    box-shadow: 0 0 0 100vmax var(--band);
+    clip-path: inset(0 -100vmax);
+  }
+
+  .statement-text {
+    max-width: calc(var(--max-width) - 2 * var(--space-page));                         /* KNOB: line length */
+    margin: 0 auto;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2rem, 5vw, 3.5rem);      /* KNOB: sentence size */
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    text-align: center;
+    color: var(--band-text);
+  }
+
+  .statement--solid .statement-circles {
+    display: none;
+  }
+
+  /* ============================================================
+     GLASS — a full-width frosted band, with colored circles
+     behind it that peek out above and below. The circles have
+     hard edges on purpose: where they stick out they stay crisp,
+     behind the glass they turn soft. That contrast reads as glass.
+     ============================================================ */
+  .statement--glass {
+    position: relative;
+
+    /* FULL WIDTH: pull the block out to the window edges.
+       (The box-shadow trick of the solid band can't carry circles,
+       so this one uses negative margins instead.) */
+    margin-inline: calc(50% - 50vw);
+
+    /* Room above and below the glass for the circles to peek out */
+    padding-block: clamp(2rem, 4vw, 3rem);              /* KNOB: how much they peek */
+  }
+
+  /* With some mouse/scrollbar setups 100vw is a few px wider than
+     the visible page, which would allow sideways scrolling.
+     This clips that sliver away. It only loads on pages that use
+     a Statement. */
+  :global(body) {
+    overflow-x: clip;
+  }
+
+  .statement-circles {
+    position: absolute;
+    inset: 0;
+
+    /* Each radial-gradient is ONE circle:
+       "circle 9rem" = its radius, "at X% Y%" = where its center sits.
+       Big + small circle = the project's accent, middle = purple.
+       KNOB: move, resize, recolor or add circles here. */
+    background:
+      radial-gradient(circle 9rem at 10% 35%, var(--project-accent) 99%, transparent 100%),
+      radial-gradient(circle 7rem at 86% 70%, var(--color-purple) 99%, transparent 100%),
+      radial-gradient(circle 3rem at 62% 12%, var(--project-accent) 99%, transparent 100%);
+  }
+
+  .statement--glass .statement-panel {
+    position: relative;                                 /* sits on top of the circles */
+    padding: clamp(4rem, 9vw, 7rem) var(--space-page);             /* KNOB: band height */
+    background: rgba(255, 254, 247, 0.35);              /* KNOB: last number = how milky (0 to 1) */
+    -webkit-backdrop-filter: blur(22px) saturate(1.3);  /* Safari needs this prefix */
+    backdrop-filter: blur(22px) saturate(1.3);          /* KNOB: blur amount */
+    border-block: 2px solid rgba(128, 35, 146, 0.6);    /* KNOB: top + bottom edge, your purple at 60% */
+  }
+
+  .statement--glass .statement-text {
+    color: var(--color-purple);                         /* KNOB: text color on glass */
+  }
+</style>

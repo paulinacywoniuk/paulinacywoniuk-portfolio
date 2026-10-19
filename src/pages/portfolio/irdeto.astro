@@ -3,6 +3,13 @@
    Images go in public/portfolio/irdeto/
    NOTE: description is a PLACEHOLDER — replace the TODO text below. */
 import ProjectPage from '../../layouts/ProjectPage.astro';
+
+// Building blocks for the part below the description
+import FeatureImage from '../../components/project/FeatureImage.astro';
+import BigSmall from '../../components/project/BigSmall.astro';
+import Statement from '../../components/project/Statement.astro';
+import UnevenPair from '../../components/project/UnevenPair.astro';
+import MyPart from '../../components/project/MyPart.astro';
 ---
 
 <ProjectPage
@@ -12,12 +19,15 @@ import ProjectPage from '../../layouts/ProjectPage.astro';
   logo="/portfolio/irdeto/irdeto-logo.png"
   logoAlt="Irdeto logo"
 
-  title="Visual Design — Irdeto"
-  subtitle="Internship"
+  title="Irdeto"
+  subtitle="Visual Design Internship"
   titleFont="'Montserrat', sans-serif"
 
   headerImage="/portfolio/irdeto/irdeto-header.jpg"
   headerAlt="Irdeto branded desk setup with laptop and notebook"
+
+  accent="var(--color-blue)"
+  accentText="var(--color-bg)"
 
   keywords={["Brand + Adobe Suite", "Team", "6 months"]}
 >
@@ -33,11 +43,44 @@ import ProjectPage from '../../layouts/ProjectPage.astro';
     [TODO — second paragraph if needed.]
   </p>
 
-  <Fragment slot="gallery">
-    <img src="/portfolio/irdeto/irdeto-1.jpg" alt="Irdeto visual design work" />
-    <img src="/portfolio/irdeto/irdeto-2.jpg" alt="Irdeto visual design work" />
-    <img src="/portfolio/irdeto/irdeto-3.jpg" alt="Irdeto visual design work" />
-    <img src="/portfolio/irdeto/irdeto-4.jpg" alt="Irdeto visual design work" />
+  <Fragment slot="sections">
+
+    <FeatureImage
+      src="/portfolio/irdeto/irdeto-1.jpg"
+      alt="Irdeto visual design work"
+      label="[Label]"
+      caption="[one-line caption]"
+    />
+
+    <BigSmall
+      bigSrc="/portfolio/irdeto/irdeto-2.jpg"
+      bigAlt="Irdeto visual design work"
+      smallSrc="/portfolio/irdeto/irdeto-3.jpg"
+      smallAlt="Irdeto visual design work"
+      heading="[Short line about the brand system]"
+    >
+      [One or two sentences about the deliverables shown here.]
+    </BigSmall>
+
+    <Statement>
+      [One sentence about what you learned designing inside an existing brand.]
+    </Statement>
+
+    <UnevenPair
+      aSrc="/portfolio/irdeto/irdeto-4.jpg"
+      aAlt="Irdeto visual design work"
+      aCaption="[caption]"
+      bAlt="NEW: process image, e.g. sketch next to the final design"
+      bCaption="[caption]"
+    />
+
+    <MyPart
+      heading="My part in the team"
+      mainAlt="NEW: your favourite piece, large"
+    >
+      [Two sentences about your role and what you owned during the internship.]
+    </MyPart>
+
   </Fragment>
 
 </ProjectPage>

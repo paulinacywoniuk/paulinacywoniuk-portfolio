@@ -1,0 +1,142 @@
+---
+/* ============================================================
+   MyPart.astro — "what I did" section: heading + text side by
+   side, one big image, and an optional row of smaller strips
+   under it (e.g. email banners). Handy for team projects, where
+   your own part needs its own spot.
+
+   <MyPart
+     heading="My part: the digital side"
+     mainSrc="/portfolio/roots/roots-website.jpg"  mainAlt="Website mockup"
+     strips={[
+       { src: '/portfolio/roots/roots-email-banner1.jpg', alt: 'Email banner' },
+       { alt: 'NEW: second email banner' },   ← no src yet = placeholder
+     ]}
+   >
+     I designed the festival's website page and mail header.
+   </MyPart>
+
+   Strips sit in ONE row (1, 2 or 3 of them share the width).
+   On phones they stack.
+
+   Images are NOT cropped here: a laptop mockup or a banner shows
+   in its own shape. Placeholders use the shapes below until the
+   real image is in.
+   ============================================================ */
+const {
+  heading = 'My part',
+  mainSrc, mainAlt = '',
+  strips = [],                  // list of { src, alt } — see above
+  stripRatio = '1297 / 481',    // KNOB: placeholder shape for strips (an email banner)
+
+  // Older single-strip version still works:
+  stripSrc, stripAlt,
+} = Astro.props;
+
+// If the old stripSrc/stripAlt props are used, treat them as a list of one
+// What one strip looks like: an optional image path + its alt text
+type Strip = { src?: string; alt: string };
+
+// If the old stripSrc/stripAlt props are used, treat them as a list of one
+const allStrips: Strip[] = strips.length
+  ? strips
+  : (stripSrc || stripAlt) ? [{ src: stripSrc, alt: stripAlt ?? '' }] : [];
+---
+
+<section class="my-part" style={`--strip-ratio: ${stripRatio};`}>
+  <div class="my-part-intro">
+    <h2 class="my-part-heading">{heading}</h2>
+    <div class="my-part-text"><slot /></div>
+  </div>
+
+  {mainSrc ? (
+    <img src={mainSrc} alt={mainAlt} class="my-part-main" />
+  ) : (
+    <div class="my-part-main placeholder">[{mainAlt}]</div>
+  )}
+
+  {allStrips.length > 0 && (
+    <div class="my-part-strips">
+      {allStrips.map((strip) => (
+        strip.src ? (
+          <img src={strip.src} alt={strip.alt} class="my-part-strip" />
+        ) : (
+          <div class="my-part-strip placeholder">[{strip.alt}]</div>
+        )
+      ))}
+    </div>
+  )}
+</section>
+
+<style>
+  .my-part-intro {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 3rem;
+    align-items: flex-end;
+    margin-bottom: 2rem;
+  }
+
+  .my-part-heading {
+    flex: 0 0 auto;                          /* as wide as the heading needs: stays on one line */
+    max-width: 100%; 
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 2.75rem);   /* KNOB: heading size */
+    line-height: 1.05;
+    color: var(--color-purple);
+  }
+
+  .my-part-text {
+    flex: 1 1 16rem;
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+
+  .my-part-text :global(p) {
+    margin: 0;
+  }
+
+  /* ---------- Main image (e.g. laptop mockup) ---------- */
+  .my-part-main {
+    width: 100%;
+    height: auto;                            /* keeps the image's own shape */
+    display: block;
+    border-radius: 16px;
+  }
+
+  .my-part-main.placeholder {
+    aspect-ratio: 16 / 9;                    /* KNOB: placeholder shape */
+  }
+
+  /* ---------- Strips: one row, equal widths ---------- */
+  .my-part-strips {
+    display: flex;
+    flex-wrap: wrap;                         /* stacks when there isn't room */
+    gap: 1.5rem;                             /* KNOB: space between the strips */
+    margin-top: 1.5rem;                      /* KNOB: space under the main image */
+  }
+
+  .my-part-strip {
+    flex: 1 1 20rem;                         /* equal share; drops to its own line below ~20rem */
+    min-width: 0;
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 12px;                     /* KNOB: strip roundness */
+  }
+
+  .my-part-strip.placeholder {
+    aspect-ratio: var(--strip-ratio);
+  }
+
+  .placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    border: 2px dashed var(--color-purple);
+    color: var(--color-purple);
+    text-align: center;
+  }
+</style>

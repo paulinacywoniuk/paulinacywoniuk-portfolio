@@ -17,14 +17,20 @@
    ============================================================ */
 
 import ProjectPage from '../../layouts/ProjectPage.astro';
+
+// Building blocks for the part below the description
+import FeatureImage from '../../components/project/FeatureImage.astro';
+import BigSmall from '../../components/project/BigSmall.astro';
+import Statement from '../../components/project/Statement.astro';
+import UnevenPair from '../../components/project/UnevenPair.astro';
+import MyPart from '../../components/project/MyPart.astro';
 ---
 
 <ProjectPage
   pageTitle="Roots Film Festival — Paulina Cywoniuk"
   pageDescription="Visual identity for the ROOTS Film Festival at Filmhuis Den Haag."
 
-  logo="/portfolio/roots/roots-logo.png
-  "
+  logo="/portfolio/roots/roots-logo.png"
   logoAlt="ROOTS Film Festival logo"
 
   title="Roots Film Festival"
@@ -32,6 +38,9 @@ import ProjectPage from '../../layouts/ProjectPage.astro';
 
   headerImage="/portfolio/roots/roots-header.jpg"
   headerAlt="ROOTS Film Festival banner on a building facade"
+
+  accent="var(--color-orange)"
+  accentText="var(--color-purple)"
 
   keywords={["Graphic Design", "Visual Identity", "Team", "3 months"]}
 >
@@ -58,12 +67,54 @@ import ProjectPage from '../../layouts/ProjectPage.astro';
     would resonate with the local film community.
   </p>
 
-  <!-- GALLERY (named slot). Your 4 mockup images. -->
-  <Fragment slot="gallery">
-    <img src="/portfolio/roots/roots-1.png"  />
-    <img src="/portfolio/roots/roots-2.png"  />
-    <img src="/portfolio/roots/roots-3.jpg"  />
-    <img src="/portfolio/roots/roots-4.png"  />
+  <!-- SECTIONS (named slot): the building blocks below the
+       description, top to bottom. Reorder, remove or repeat them. -->
+  <Fragment slot="sections">
+
+    <FeatureImage
+      src="/portfolio/roots/roots-1.png"
+      alt="Three ROOTS posters on a concrete wall with a passer-by"
+      
+      caption="Posters design"
+      ratio="16 / 9"
+    />
+
+       <BigSmall
+      bigSrc="/portfolio/roots/roots-2.png"
+      bigAlt="ROOTS banner and yellow flag on the Filmhuis building"
+       smallSrc="/portfolio/roots/roots-5.jpg"
+      smallAlt="NEW: image coming soon"
+      heading="One line, on everything."
+    >
+      Banners, flags, posters, coasters, totes, Instagram and the big screen.
+    </BigSmall>
+
+    <Statement>
+      Logo inspired by the unrolling film tape. Modular design system for all festival deliverables - veritcal and horizontal.
+    </Statement>
+
+        <UnevenPair
+      aSrc="/portfolio/roots/roots-4.png"
+      aAlt="ROOTS coasters in six colours next to a wine glass"
+      aCaption="Coasters"
+      bSrc="/portfolio/roots/roots-3.jpg"
+      bAlt="Pile of ROOTS tote bags"
+      bCaption="Tote bags for festival guests"
+    />
+
+        <MyPart
+      heading="My part: the digital side"
+      mainSrc="/portfolio/roots/roots-website-mockup.jpg"
+      mainAlt="NEW: website mockup in a laptop frame"
+      strips={[
+        { src: '/portfolio/roots/roots-email-banner1.jpg', alt: 'ROOTS email banner with a film still and the Filmhuis Den Haag logo' },
+        { src: '/portfolio/roots/roots-email-banner2.jpg', alt: 'ROOTS email banner with a film still and the Filmhuis Den Haag logo' },
+        
+      ]}
+    >
+      I designed the festival's website page and mail header. Webiste of the Filmhuis Den Haag has it's own style of using black and white headers, so my design needed to reflect their visual identity while also incorporating the ROOTS branding. The email banners were designed to be visually engaging.
+    </MyPart>
+
   </Fragment>
 
 </ProjectPage>

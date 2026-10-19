@@ -1,0 +1,80 @@
+---
+/* ============================================================
+   FeatureImage.astro — ONE big image, full width, with a small
+   label + caption underneath. Use it for the most important
+   image after the header.
+
+   <FeatureImage
+     src="/portfolio/roots/roots-1.png"
+     alt="Three ROOTS posters on a wall"
+     label="Posters"
+     caption="Three colourways of one line"
+   />
+
+   No src yet? Leave it out: a dashed placeholder box shows the
+   alt text, so you can see where new content still has to go.
+   ============================================================ */
+const {
+  src,
+  alt = '',
+  label,                 // short bold word on the left, e.g. "Posters"
+  caption,               // one line on the right
+  ratio = '16 / 9',      // KNOB: image shape, e.g. '3 / 2', '21 / 9'
+} = Astro.props;
+---
+
+<figure class="feature" style={`--ratio: ${ratio};`}>
+  {src ? (
+    <img src={src} alt={alt} class="feature-img" />
+  ) : (
+    <div class="feature-img placeholder">[{alt}]</div>
+  )}
+
+  {(label || caption) && (
+    <figcaption class="feature-caption">
+      {label && <span class="feature-label">{label}</span>}
+      {caption && <span>{caption}</span>}
+    </figcaption>
+  )}
+</figure>
+
+<style>
+  .feature {
+    margin: 0;
+  }
+
+  .feature-img {
+    width: 100%;
+    aspect-ratio: var(--ratio);
+    object-fit: cover;             /* fills the shape, crops the edges */
+    display: block;
+    border-radius: 16px;           /* KNOB: roundness */
+  }
+
+  .feature-caption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: var(--color-text-muted);
+  }
+
+  .feature-label {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--color-purple);    /* KNOB: label color */
+  }
+
+  .placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    border: 2px dashed var(--color-purple);
+    color: var(--color-purple);
+    text-align: center;
+  }
+</style>

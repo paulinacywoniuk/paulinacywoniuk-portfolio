@@ -7,7 +7,11 @@
      2. Header image (full landscape)
      3. Keyword pill bar (type / role / team / timeline)
      4. Description text
-     5. Gallery of images below
+     5. Sections below: stacked building blocks from
+        src/components/project/ (FeatureImage, BigSmall,
+        Statement, UnevenPair, MyPart), passed in the
+        "sections" slot. (The old "gallery" slot still works
+        for pages that haven't moved to sections yet.)
 
    HOW IT'S USED:
    Each project page (e.g. roots.astro) imports this and passes
@@ -39,11 +43,20 @@ const {
 
   // --- Keyword pills: an array of strings, shown in one rounded bar ---
   keywords = [],             // e.g. ["Graphic Design", "Visual Identity", "Team", "3 months"]
+
+  // --- Project accent: ONE brand color per project, used by the
+  //     section blocks (text tiles, statement band). Match it to the
+  //     project's card color on the portfolio page. ---
+  accent = 'var(--color-purple)',     // tile + band background
+  accentText = 'var(--color-bg)',     // text on top of the accent
 } = Astro.props;
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
-  <article class="project-page">
+  <article
+    class="project-page"
+    style={`--project-accent: ${accent}; --project-accent-text: ${accentText};`}
+  >
 
     <!-- 1. LOCKUP: logo left, title right -->
     <header class="lockup">
@@ -77,7 +90,12 @@ const {
       <slot />
     </div>
 
-    <!-- 5. GALLERY — passed in as a named slot -->
+    <!-- 5. SECTIONS — building blocks, stacked with big gaps -->
+    <div class="sections">
+      <slot name="sections" />
+    </div>
+
+    <!-- OLD GALLERY — kept for pages not moved to sections yet -->
     <div class="gallery">
       <slot name="gallery" />
     </div>
@@ -187,7 +205,23 @@ const {
   }
 
   /* ============================================================
-     5. GALLERY — images stacked, generous spacing
+     5. SECTIONS — the building blocks below the description.
+     Each block styles itself; this only sets the space between.
+     ============================================================ */
+  .sections {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(4rem, 10vw, 7.5rem);      /* KNOB: space between sections */
+    margin-bottom: clamp(4rem, 10vw, 7.5rem);
+  }
+
+  /* An empty sections slot shouldn't leave a gap */
+  .sections:empty {
+    display: none;
+  }
+
+  /* ============================================================
+     OLD GALLERY — images stacked, generous spacing
      The actual images come from the project page via the
      "gallery" slot, so each project controls its own gallery.
      ============================================================ */

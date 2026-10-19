@@ -2,6 +2,13 @@
 /* CraftiPlays / Lands of Magic project page.  URL: /portfolio/craftiplays
    Images go in public/portfolio/craftiplays/ */
 import ProjectPage from '../../layouts/ProjectPage.astro';
+
+// Building blocks for the part below the description
+import FeatureImage from '../../components/project/FeatureImage.astro';
+import BigSmall from '../../components/project/BigSmall.astro';
+import Statement from '../../components/project/Statement.astro';
+import UnevenPair from '../../components/project/UnevenPair.astro';
+import MyPart from '../../components/project/MyPart.astro';
 ---
 
 <ProjectPage
@@ -11,11 +18,14 @@ import ProjectPage from '../../layouts/ProjectPage.astro';
   logo="/portfolio/craftiplays/craftiplays-logo.png"
   logoAlt="CraftiPlays logo"
 
-  title={'"Lands of Magic"'}
+  title={'Lands of Magic'}
   subtitle="Mobile Game Assets Design"
 
   headerImage="/portfolio/craftiplays/craftiplays-header.png"
   headerAlt="Colourful illustrated game assets for Lands of Magic"
+
+  accent="var(--color-cyan)"
+  accentText="var(--color-purple)"
 
   keywords={["Mobile Game", "Unity + Adobe Suite", "Team", "10 months"]}
 >
@@ -33,11 +43,44 @@ import ProjectPage from '../../layouts/ProjectPage.astro';
     a magical world where visuals enrich the storytelling and gameplay experience.
   </p>
 
-  <Fragment slot="gallery">
-    <img src="/portfolio/craftiplays/craftiplays-1.jpg" alt="Illustrated magical plants and trees" />
-    <img src="/portfolio/craftiplays/craftiplays-2.jpg" alt="Illustrated cauldron and magical houses" />
-    <img src="/portfolio/craftiplays/craftiplays-3.jpg" alt="Game UI: login and sign-up screens" />
-    <img src="/portfolio/craftiplays/craftiplays-4.jpg" alt="Game UI: loading screen with progress bars" />
+  <Fragment slot="sections">
+
+    <FeatureImage
+      src="/portfolio/craftiplays/craftiplays-2.jpg"
+      alt="Illustrated cauldron and magical houses in seasonal versions"
+      label="Assets"
+      caption="[one-line caption, e.g. one building, three seasons]"
+    />
+
+    <BigSmall
+      bigSrc="/portfolio/craftiplays/craftiplays-1.jpg"
+      bigAlt="Illustrated magical plants and trees"
+      smallAlt="NEW: an asset from the purchased pack next to one of yours"
+      heading="Matching an existing style"
+    >
+      Every asset had to fit the style of an asset pack the team had already bought.
+    </BigSmall>
+
+    <Statement>
+      [One sentence about what makes a game asset feel magical.]
+    </Statement>
+
+    <UnevenPair
+      aSrc="/portfolio/craftiplays/craftiplays-3.jpg"
+      aAlt="Game UI: login and sign-up screens"
+      aCaption="Login and sign-up screens"
+      bSrc="/portfolio/craftiplays/craftiplays-4.jpg"
+      bAlt="Game UI: loading screen with progress bars"
+      bCaption="Loading screen"
+    />
+
+    <MyPart
+      heading="From sketch to vector"
+      mainAlt="NEW: one asset in Illustrator, from sketch to final vector"
+    >
+      All assets are vectorised in Illustrator so the whole team can use them. [One sentence on your process.]
+    </MyPart>
+
   </Fragment>
 
 </ProjectPage>

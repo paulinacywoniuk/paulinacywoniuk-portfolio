@@ -1,0 +1,93 @@
+---
+/* ============================================================
+   UnevenPair.astro — two images side by side, deliberately NOT
+   equal: the first is wider, the second narrower and set lower.
+   Each has an optional caption.
+
+   <UnevenPair
+     aSrc="/portfolio/roots/roots-3.jpg" aAlt="..." aCaption="Tote bags"
+     bAlt="Logo sketches"                bCaption="..."
+   />
+   (no bSrc yet → dashed placeholder)
+   ============================================================ */
+const {
+  aSrc, aAlt = '', aCaption,
+  bSrc, bAlt = '', bCaption,
+  offset = '5rem',              // KNOB: how much lower the second image sits
+} = Astro.props;
+---
+
+<section class="pair" style={`--offset: ${offset};`}>
+  <figure class="pair-a">
+    {aSrc ? (
+      <img src={aSrc} alt={aAlt} class="pair-img" />
+    ) : (
+      <div class="pair-img placeholder">[{aAlt}]</div>
+    )}
+    {aCaption && <figcaption>{aCaption}</figcaption>}
+  </figure>
+
+  <figure class="pair-b">
+    {bSrc ? (
+      <img src={bSrc} alt={bAlt} class="pair-img" />
+    ) : (
+      <div class="pair-img placeholder">[{bAlt}]</div>
+    )}
+    {bCaption && <figcaption>{bCaption}</figcaption>}
+  </figure>
+</section>
+
+<style>
+  .pair {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+
+  .pair figure {
+    margin: 0;
+    min-width: 0;
+  }
+
+  .pair-a {
+    flex: 1.5 1 26rem;               /* KNOB: first number = how much wider A is */
+  }
+
+  .pair-b {
+    flex: 1 1 18rem;
+    margin-top: var(--offset);
+  }
+
+  .pair-img {
+    width: 100%;
+    aspect-ratio: 4 / 3;             /* KNOB: image shape */
+    object-fit: cover;
+    display: block;
+    border-radius: 16px;
+  }
+
+  .pair figcaption {
+    margin-top: 0.75rem;
+    font-size: 1rem;
+    color: var(--color-text-muted);
+  }
+
+  .placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    border: 2px dashed var(--color-purple);
+    color: var(--color-purple);
+    text-align: center;
+  }
+
+  /* On phones the two stack, so the offset isn't needed */
+  @media (max-width: 640px) {
+    .pair-b {
+      margin-top: 0;
+    }
+  }
+</style>

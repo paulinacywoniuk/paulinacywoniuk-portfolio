@@ -9,15 +9,23 @@
      bAlt="Logo sketches"                bCaption="..."
    />
    (no bSrc yet → dashed placeholder)
+
+   IMAGE SHAPE — both images are cut to 4:3 by default. If an
+   image gets cropped too much, give it its own shape:
+     bRatio="auto"     → shows the WHOLE image, in its own shape
+     bRatio="16 / 9"   → any other shape you like
+   (same for aRatio)
    ============================================================ */
 const {
   aSrc, aAlt = '', aCaption,
   bSrc, bAlt = '', bCaption,
-  offset = '5rem',              // KNOB: how much lower the second image sits
+  offset = '0rem',              // KNOB: how much lower the second image sits (try '5rem')
+  aRatio = '4 / 3',             // KNOB: shape of image A ('auto' = its own shape)
+  bRatio = '4 / 3',             // KNOB: shape of image B ('auto' = its own shape)
 } = Astro.props;
 ---
 
-<section class="pair" style={`--offset: ${offset};`}>
+<section class="pair" style={`--offset: ${offset}; --a-ratio: ${aRatio}; --b-ratio: ${bRatio};`}>
   <figure class="pair-a">
     {aSrc ? (
       <img src={aSrc} alt={aAlt} class="pair-img" />
@@ -54,18 +62,23 @@ const {
     flex: 1.5 1 26rem;               /* KNOB: first number = how much wider A is */
   }
 
-  .pair-b {
+  /* ".pair .pair-b" (not just ".pair-b") so this beats the
+     "margin: 0" of ".pair figure" above */
+  .pair .pair-b {
     flex: 1 1 18rem;
     margin-top: var(--offset);
   }
 
   .pair-img {
     width: 100%;
-    aspect-ratio: 4 / 3;             /* KNOB: image shape */
-    object-fit: cover;
+    height: auto;
+    object-fit: cover;               /* fills the shape, crops the edges */
     display: block;
     border-radius: 16px;
   }
+
+  .pair-a .pair-img { aspect-ratio: var(--a-ratio); }
+  .pair-b .pair-img { aspect-ratio: var(--b-ratio); }
 
   .pair figcaption {
     margin-top: 0.75rem;
@@ -82,11 +95,12 @@ const {
     border: 2px dashed var(--color-purple);
     color: var(--color-purple);
     text-align: center;
+    min-height: 12rem;               /* so an 'auto' placeholder doesn't collapse */
   }
 
   /* On phones the two stack, so the offset isn't needed */
   @media (max-width: 640px) {
-    .pair-b {
+    .pair .pair-b {
       margin-top: 0;
     }
   }

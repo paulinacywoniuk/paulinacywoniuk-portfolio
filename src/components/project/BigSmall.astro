@@ -14,6 +14,21 @@
 
    reverse={true} puts the big image on the RIGHT instead.
 
+   SMALL IMAGE AS A LINK (optional) — e.g. to credit someone else's
+   work shown in the small spot:
+     smallHref="https://..."          → clicking the image opens it in a new tab
+     smallCredit="GUI pack: The Stone" → a visible label on the image
+
+   SMALL IMAGE SHAPE — cut to 4:3 by default. If it gets cropped
+   too much:  smallRatio="auto"  shows the WHOLE image in its own
+   shape (or give any shape, e.g. smallRatio="3 / 2").
+
+   BIG IMAGE FIT — the big image stretches to the height of the
+   column next to it and is cropped to fill that box ('cover').
+   If too much gets cut off:  bigFit="contain"  shows the WHOLE
+   image inside the box instead (works best for images with a
+   light, plain background, so the empty space doesn't show).
+
    TILE LOOK — switch for ALL pages with the `tileStyle` default
    below, or for one block with tileStyle="solid":
      'glass' = frosted glass with a purple outline, over circles
@@ -22,6 +37,10 @@
 const {
   bigSrc, bigAlt = '',
   smallSrc, smallAlt = '',
+  smallHref,                              // optional: makes the small image a link
+  smallCredit,                            // optional: visible label on the small image
+  smallRatio = '4 / 3',                   // KNOB: small image shape ('auto' = its own shape)
+  bigFit = 'cover',                       // KNOB: 'cover' (fill, crop edges) or 'contain' (whole image)
   heading,                                // big words in the tile
   // Colors come from the page's accent (set on ProjectPage).
   // Pass these only to override ONE tile.
@@ -34,7 +53,7 @@ const {
 
 <section
   class:list={['big-small', { 'big-small--reverse': reverse }]}
-  style={`--tile-color: ${tileColor}; --tile-text: ${tileTextColor};`}
+  style={`--tile-color: ${tileColor}; --tile-text: ${tileTextColor}; --small-ratio: ${smallRatio}; --big-fit: ${bigFit};`}
 >
   {bigSrc ? (
     <img src={bigSrc} alt={bigAlt} class="big" />
@@ -43,7 +62,15 @@ const {
   )}
 
   <div class="side">
-    {smallSrc ? (
+    {smallSrc && smallHref ? (
+      <!-- Linked version: opens in a new tab. rel="noopener" is a
+           safety habit for links to other sites. -->
+      <a href={smallHref} class="small-link" target="_blank" rel="noopener noreferrer">
+        <img src={smallSrc} alt={smallAlt} class="small" />
+        {smallCredit && <span class="small-credit">{smallCredit} ↗</span>}
+        <span class="visually-hidden">(opens in a new tab)</span>
+      </a>
+    ) : smallSrc ? (
       <img src={smallSrc} alt={smallAlt} class="small" />
     ) : (
       <div class="small placeholder">[{smallAlt}]</div>
@@ -78,8 +105,8 @@ const {
     min-width: 0;
     min-height: 22rem;
     align-self: stretch;                 /* same height as the side column, so the
-                                            bottoms line up (object-fit crops the photo) */
-    object-fit: cover;
+                                            bottoms line up */
+    object-fit: var(--big-fit);          /* set with bigFit, see top of file */
     display: block;
     border-radius: 16px;
   }
@@ -93,7 +120,8 @@ const {
 
   .small {
     width: 100%;
-    aspect-ratio: 4 / 3;                 /* KNOB: small image shape */
+    height: auto;
+    aspect-ratio: var(--small-ratio);    /* set with smallRatio, see top of file */
     object-fit: cover;
     display: block;
     border-radius: 16px;
@@ -104,6 +132,59 @@ const {
     flex: 1;
     position: relative;
     display: flex;
+  }
+
+  /* ---------- Linked small image ---------- */
+  .small-link {
+    position: relative;                  /* so the credit label can sit on top */
+    display: block;
+    border-radius: 16px;
+    overflow: hidden;                    /* keeps the zoom inside the rounded corners */
+  }
+
+  .small-link .small {
+    border-radius: 0;
+    transition: transform 0.4s ease;
+  }
+
+  .small-link:hover .small {
+    transform: scale(1.03);              /* KNOB: hover zoom */
+  }
+
+  .small-link:focus-visible {
+    outline: 3px solid var(--color-blue);
+    outline-offset: 4px;
+  }
+
+  .small-credit {
+    position: absolute;
+    left: 0.75rem;
+    bottom: 0.75rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(255, 254, 247, 0.9);   /* KNOB: label background */
+    color: var(--color-purple);
+    font-size: 0.85rem;
+    line-height: 1.2;
+  }
+
+  .small-link:hover .small-credit {
+    text-decoration: underline;
+  }
+
+  /* Read by screen readers, invisible on screen */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .small-link .small { transition: none; }
+    .small-link:hover .small { transform: none; }
   }
 
   .tile {

@@ -16,6 +16,14 @@
      I designed the festival's website page and mail header.
    </MyPart>
 
+   INSTEAD OF A MAIN IMAGE you can put any block in the main spot,
+   e.g. a CompareSlider, with slot="main":
+
+   <MyPart heading="Seasonal skins">
+     <CompareSlider slot="main" beforeSrc="..." afterSrc="..." />
+     Text about the skins...
+   </MyPart>
+
    Strips sit in ONE row (1, 2 or 3 of them share the width).
    On phones they stack.
 
@@ -23,7 +31,7 @@
    in its own shape. Placeholders use the shapes below until the
    real image is in.
    ============================================================ */
-const {
+   const {
   heading = 'My part',
   mainSrc, mainAlt = '',
   strips = [],                  // list of { src, alt } — see above
@@ -33,7 +41,6 @@ const {
   stripSrc, stripAlt,
 } = Astro.props;
 
-// If the old stripSrc/stripAlt props are used, treat them as a list of one
 // What one strip looks like: an optional image path + its alt text
 type Strip = { src?: string; alt: string };
 
@@ -49,7 +56,9 @@ const allStrips: Strip[] = strips.length
     <div class="my-part-text"><slot /></div>
   </div>
 
-  {mainSrc ? (
+  {Astro.slots.has('main') ? (
+    <slot name="main" />
+  ) : mainSrc ? (
     <img src={mainSrc} alt={mainAlt} class="my-part-main" />
   ) : (
     <div class="my-part-main placeholder">[{mainAlt}]</div>
@@ -79,7 +88,7 @@ const allStrips: Strip[] = strips.length
 
   .my-part-heading {
     flex: 0 0 auto;                          /* as wide as the heading needs: stays on one line */
-    max-width: 100%; 
+    max-width: 100%;                         /* ...but on phones it may wrap instead of sticking out */
     margin: 0;
     font-size: clamp(2rem, 4vw, 2.75rem);   /* KNOB: heading size */
     line-height: 1.05;
@@ -87,7 +96,7 @@ const allStrips: Strip[] = strips.length
   }
 
   .my-part-text {
-    flex: 1 1 16rem;
+    flex: 1 1 16rem;                         /* takes the space that's left; below 16rem it drops under the heading */
     font-size: 1.1rem;
     line-height: 1.6;
   }

@@ -1,0 +1,173 @@
+---
+/* ============================================================
+   CompareSlider.astro — two images stacked on top of each other,
+   with a handle you drag sideways: left of the handle you see
+   image A ("before"), right of it image B ("after").
+
+   <CompareSlider
+     beforeSrc="/portfolio/craftiplays/craftiplays-skins-lake.jpg"
+     beforeAlt="Golden Lake in normal, summer and Halloween skins"
+     beforeLabel="Golden Lake"
+     afterSrc="/portfolio/craftiplays/craftiplays-skins-shop.jpg"
+     afterAlt="Witch Shop in normal, summer and Halloween skins"
+     afterLabel="Witch Shop"
+   />
+
+   IMPORTANT: both images must be the SAME size, with the same
+   layout, or things will jump when you slide. Give them a solid
+   background (not transparent), or image A shows through B.
+
+   HOW IT WORKS
+   - Image B sits on top of A and is cut away (clip-path) on the
+     left, up to the handle position.
+   - The handle position is ONE CSS variable, --pos (0% to 100%).
+   - An invisible range slider (<input type="range">) covers the
+     whole image. Dragging it updates --pos with 2 lines of JS.
+     Using a real slider means keyboard (arrow keys) and screen
+     readers work for free.
+   ============================================================ */
+const {
+  beforeSrc, beforeAlt = '', beforeLabel,
+  afterSrc,  afterAlt = '',  afterLabel,
+  start = 50,                 // KNOB: where the handle starts, in % from the left
+} = Astro.props;
+---
+
+<div class="compare" style={`--pos: ${start}%;`} data-compare>
+  <img src={beforeSrc} alt={beforeAlt} class="compare-img" />
+  <img src={afterSrc} alt={afterAlt} class="compare-img compare-after" />
+
+  {beforeLabel && <span class="compare-label compare-label--before">{beforeLabel}</span>}
+  {afterLabel && <span class="compare-label compare-label--after">{afterLabel}</span>}
+
+  <input
+    type="range"
+    min="0"
+    max="100"
+    value={start}
+    class="compare-range"
+    aria-label={`Slide to compare ${beforeLabel ?? 'the first image'} and ${afterLabel ?? 'the second image'}`}
+  />
+
+  <!-- The visible line + round handle. pointer-events: none lets
+       clicks and drags go through to the invisible slider. -->
+  <div class="compare-handle" aria-hidden="true">
+    <span class="compare-knob">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6 L3 12 L9 18 M15 6 L21 12 L15 18"/></svg>
+    </span>
+  </div>
+</div>
+
+<script>
+  // For every slider on the page: when the range moves, update --pos.
+  document.querySelectorAll<HTMLElement>('[data-compare]').forEach((box) => {
+    const range = box.querySelector<HTMLInputElement>('.compare-range');
+    if (!range) return;
+    range.addEventListener('input', () => {
+      box.style.setProperty('--pos', `${range.value}%`);
+    });
+  });
+</script>
+
+<style>
+  .compare {
+    position: relative;                 /* everything else is placed inside this box */
+    border-radius: 16px;                /* KNOB: roundness */
+    overflow: hidden;
+    user-select: none;
+    --handle-color: var(--color-purple);   /* KNOB: line + knob color */
+  }
+
+  .compare-img {
+    display: block;
+    width: 100%;
+    height: auto;                       /* image A sets the size of the whole block */
+  }
+
+  /* Image B: exactly on top of A, cut away left of the handle */
+  .compare-after {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    clip-path: inset(0 0 0 var(--pos));
+  }
+
+  /* ---------- Labels in the top corners ---------- */
+  .compare-label {
+    position: absolute;
+    top: 1rem;
+    padding: 0.35rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(255, 254, 247, 0.9);
+    border: 1.5px solid var(--handle-color);
+    color: var(--color-purple);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9rem;
+    pointer-events: none;
+  }
+
+  .compare-label--before { left: 1rem; }
+  .compare-label--after  { right: 1rem; }
+
+  /* ---------- The line + knob ---------- */
+  .compare-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--pos);
+    width: 3px;                         /* KNOB: line thickness */
+    transform: translateX(-50%);
+    background: var(--handle-color);
+    pointer-events: none;
+  }
+
+  .compare-knob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 3rem;                        /* KNOB: knob size */
+    height: 3rem;
+    border-radius: 50%;
+    background: var(--color-bg);
+    border: 3px solid var(--handle-color);
+    color: var(--handle-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  }
+
+  /* ---------- The invisible slider on top of everything ---------- */
+  .compare-range {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;                         /* invisible, but still works */
+    cursor: ew-resize;                  /* left-right arrow cursor */
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  /* A tall, wide invisible "thumb", so on phones you can grab the
+     handle anywhere along the line */
+  .compare-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 3rem;
+    height: 100vh;
+  }
+  .compare-range::-moz-range-thumb {
+    width: 3rem;
+    height: 100vh;
+    border: 0;
+  }
+
+  /* Keyboard users: show where focus is */
+  .compare-range:focus-visible ~ .compare-handle .compare-knob {
+    outline: 3px solid var(--color-blue);
+    outline-offset: 3px;
+  }
+</style>

@@ -9,6 +9,8 @@ import BigSmall from '../../components/project/BigSmall.astro';
 import Statement from '../../components/project/Statement.astro';
 import UnevenPair from '../../components/project/UnevenPair.astro';
 import MyPart from '../../components/project/MyPart.astro';
+import CompareSlider from '../../components/project/CompareSlider.astro';
+---
 ---
 
 <ProjectPage
@@ -46,10 +48,9 @@ import MyPart from '../../components/project/MyPart.astro';
   <Fragment slot="sections">
 
     <FeatureImage
-      src="/portfolio/craftiplays/craftiplays-2.jpg"
+      src="/portfolio/craftiplays/LandsOfMagic-Vizualization.jpg"
       alt="Illustrated cauldron and magical houses in seasonal versions"
-      label="Assets"
-      caption="[one-line caption, e.g. one building, three seasons]"
+      caption="Mobile game Lands of Magic - UI elements and illustrated assets for the magical world."
     />
 
     <BigSmall
@@ -63,27 +64,33 @@ import MyPart from '../../components/project/MyPart.astro';
       smallCredit="Asset pack: GUI The Stone (not my work)"
       heading="Matching an existing style"
     >
-      Every asset had to fit the style of an asset pack the team had already bought.
+      Every new asset design had to fit the style of an asset pack the team had already bought before I joined.
     </BigSmall>
 
     <Statement>
-      [One sentence about what makes a game asset feel magical.]
+      I was tasked to design, in matching to existing style, assets that would reflect the magical and cartoonish style of the in-game world.
     </Statement>
 
     <UnevenPair
-      aSrc="/portfolio/craftiplays/craftiplays-4.jpg"
-      aAlt="in game currency in it's natural environment plus loading bar UI"
-      aCaption="In-game environment with currencies and loading bar UI."
+      aSrc="/portfolio/craftiplays/craftiplays-currencies-background.jpg"
+      aAlt="In-game currency in illustrated environment plus loading bar UI"
+      aCaption="In-game currencies in illustrated environment with loading bar UI."
       bSrc="/portfolio/craftiplays/green-eye-process.jpg"
       bAlt="Process of designing the Green Eye event currency"
       bCaption="Process of designing the Green Eye event currency."
     />
 
-    <MyPart
-      heading="From sketch to vector"
-      mainAlt="NEW: one asset in Illustrator, from sketch to final vector"
-    >
-      All assets are vectorised in Illustrator so the whole team can use them. [One sentence on your process.]
+        <MyPart heading="Seasonal skins">
+      <CompareSlider
+        slot="main"
+        beforeSrc="/portfolio/craftiplays/craftiplays-skins-lake.jpg"
+        beforeAlt="Golden Lake building in normal, summer and Halloween skins"
+        beforeLabel="Golden Lake"
+        afterSrc="/portfolio/craftiplays/craftiplays-skins-shop.jpg"
+        afterAlt="Witch Shop building in normal, summer and Halloween skins"
+        afterLabel="Witch Shop"
+      />
+      [Two sentences about the seasonal buildings.]
     </MyPart>
 
   </Fragment>

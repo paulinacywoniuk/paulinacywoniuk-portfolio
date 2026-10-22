@@ -16,6 +16,11 @@
      I designed the festival's website page and mail header.
    </MyPart>
 
+   A VIDEO INSTEAD OF A MAIN IMAGE:
+     mainVideo="/portfolio/nl12/the-march.mp4"
+     mainPoster="/portfolio/nl12/the-march-poster.jpg"   (still shown before play)
+     mainAlt="Short description of the video"
+
    INSTEAD OF A MAIN IMAGE you can put any block in the main spot,
    e.g. a CompareSlider, with slot="main":
 
@@ -31,9 +36,11 @@
    in its own shape. Placeholders use the shapes below until the
    real image is in.
    ============================================================ */
-   const {
+const {
   heading = 'My part',
   mainSrc, mainAlt = '',
+  mainVideo,                    // optional: an .mp4 shown instead of the main image
+  mainPoster,                   // optional: the still image shown before the video plays
   strips = [],                  // list of { src, alt } — see above
   stripRatio = '1297 / 481',    // KNOB: placeholder shape for strips (an email banner)
 
@@ -58,6 +65,21 @@ const allStrips: Strip[] = strips.length
 
   {Astro.slots.has('main') ? (
     <slot name="main" />
+  ) : mainVideo ? (
+    <!-- preload="metadata": only loads the length + first frame until
+         the visitor presses play, so the page stays fast.
+         playsinline: plays inside the page on iPhones (no fullscreen jump). -->
+    <video
+      class="my-part-main"
+      controls
+      preload="metadata"
+      playsinline
+      poster={mainPoster}
+      aria-label={mainAlt}
+    >
+      <source src={mainVideo} type="video/mp4" />
+      Your browser can't play this video.
+    </video>
   ) : mainSrc ? (
     <img src={mainSrc} alt={mainAlt} class="my-part-main" />
   ) : (
@@ -111,6 +133,14 @@ const allStrips: Strip[] = strips.length
     height: auto;                            /* keeps the image's own shape */
     display: block;
     border-radius: 16px;
+  }
+
+  /* Video: reserve its 16:9 space before it loads, so the page
+     doesn't jump. KNOB: change if your video has another shape,
+     e.g. 1 / 1 for a square export. */
+  video.my-part-main {
+    aspect-ratio: 16 / 9;
+    background: var(--color-bg);
   }
 
   .my-part-main.placeholder {

@@ -1,0 +1,266 @@
+---
+/* ============================================================
+   CaseStudyRow.astro — one project on the portfolio page:
+   a big image on one side, title + short summary + pills on the
+   other. The WHOLE row is one link to the project page.
+
+   <CaseStudyRow
+     href="/portfolio/roots"
+     image="/portfolio/listing/roots.jpg"  imageAlt="..."
+     logo="/portfolio/roots/roots-logo.png"
+     number="03"
+     category="Visual identity · Team"
+     title="Roots Film Festival"
+     summary="One or two sentences about the project."
+     tags={['Visual identity', 'Web', '3 months']}
+     accent="var(--color-orange)"
+     note="optional hand-written note"
+     reverse={true}       ← image on the right
+   />
+
+   COLORS come from CSS variables (var(--color-...)), so if you
+   change your palette in global.css, the rows follow.
+   ============================================================ */
+const {
+  href,
+  image, imageAlt = '',
+  logo,
+  logoCover = false,        // true = the logo fills its sticker (for square logos with their own background, like NL12)
+  
+  
+  title,
+  summary,
+  tags = [],
+  accent = 'var(--color-purple)',
+  note,                     // optional hand-written note under the image
+  reverse = false,
+} = Astro.props;
+---
+
+<article
+  class:list={['row', { 'row--reverse': reverse }]}
+  style={`--accent: ${accent};`}
+>
+  <div class="row-media">
+    <img src={image} alt={imageAlt} class="row-img" loading="lazy" />
+
+    {logo && (
+      <div class:list={['row-sticker', { 'row-sticker--cover': logoCover }]} aria-hidden="true">
+        <img src={logo} alt="" />
+      </div>
+    )}
+
+    {note && (
+      <p class="row-note" aria-hidden="true">
+        <svg width="44" height="32" viewBox="0 0 44 32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M40 26 C28 24 14 18 8 6"/><path d="M8 6 L6 16 M8 6 L17 9"/></svg>
+        {note}
+      </p>
+    )}
+  </div>
+
+  <div class="row-text">
+    
+
+    <!-- The title link "stretches" over the whole row (see .row-link::after),
+         so clicking anywhere opens the project, with ONE link for
+         keyboard and screen-reader users instead of three. -->
+    <h2 class="row-title">
+      <a href={href} class="row-link">{title}</a>
+    </h2>
+
+    {summary && <p class="row-summary">{summary}</p>}
+
+    {tags.length > 0 && (
+      <ul class="row-tags">
+                {tags.map((tag: string) => <li>{tag}</li>)}
+      </ul>
+    )}
+
+    <span class="row-cta" aria-hidden="true">View case study →</span>
+  </div>
+</article>
+
+<style>
+  /* ============================================================
+     THE ROW — image + text side by side, stacks on phones
+     ============================================================ */
+  .row {
+    position: relative;                    /* the stretched link fills this */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: clamp(2rem, 5vw, 3.5rem);         /* KNOB: space between image and text */
+  }
+
+  /* Every other row: image on the right. When the row wraps on a
+     phone, the image still comes first (on top). */
+  .row--reverse {
+    flex-direction: row-reverse;
+  }
+
+  /* ---------- Image side ---------- */
+  .row-media {
+    position: relative;
+    flex: 1.4 1 28rem;                     /* KNOB: first number = how much wider the image is than the text */
+    min-width: 0;
+  }
+
+  .row-img {
+    width: 100%;
+    aspect-ratio: 16 / 10;                 /* KNOB: image shape */
+    object-fit: cover;
+    display: block;
+    border-radius: 20px;
+    transform: rotate(-1.5deg);            /* KNOB: tilt (0deg = straight) */
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
+    transition: transform 0.4s ease;
+  }
+
+  .row--reverse .row-img {
+    transform: rotate(1.5deg);             /* tilts the other way */
+  }
+
+  /* Hover (and keyboard focus): the image straightens and lifts */
+  .row:hover .row-img,
+  .row:focus-within .row-img {
+    transform: rotate(0deg) translateY(-6px);
+  }
+
+  /* ---------- Logo sticker on the image corner ---------- */
+  .row-sticker {
+    position: absolute;
+    top: -1.5rem;
+    right: 1.5rem;
+    width: 6rem;                           /* KNOB: sticker size */
+    height: 6rem;
+    padding: 0.75rem;
+    border-radius: 18px;
+    background: rgb(255, 253, 247);
+    /* border: 2px solid var(--accent); */
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+    transform: rotate(7deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .row--reverse .row-sticker {
+    right: auto;
+    left: 1.5rem;
+    transform: rotate(-7deg);
+  }
+
+  .row-sticker img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .row-sticker--cover {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .row-sticker--cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ---------- Hand-written note under the image ---------- */
+  .row-note {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 1.25rem 0 0 0.75rem;
+    font-family: 'Caveat', var(--font-display);   /* see note in global.css */
+    font-size: 1.75rem;
+    line-height: 1;
+    color: var(--color-blue);              /* KNOB: note color */
+  }
+
+  /* ---------- Text side ---------- */
+  .row-text {
+    flex: 1 1 20rem;
+  }
+
+  .row-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--color-text-muted);
+  }
+
+
+
+  .row-title {
+    font-size: clamp(2rem, 4vw, 2.75rem);  /* KNOB: title size */
+    line-height: 1.05;
+    margin-bottom: 1rem;
+  }
+
+  .row-link {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  /* The stretched link: an invisible box over the whole row */
+  .row-link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .row-link:focus-visible {
+    outline: none;                          /* the outline goes on the row instead, below */
+  }
+
+  .row:focus-within {
+    outline: 3px solid var(--color-blue);
+    outline-offset: 12px;
+    border-radius: 20px;
+  }
+
+  .row-summary {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1.25rem;
+  }
+
+  .row-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    margin-bottom: 1.5rem;
+  }
+
+  .row-tags li {
+    padding: 0.35rem 0.9rem;
+    border: 1.5px solid var(--accent);
+    border-radius: 999px;
+    font-size: 0.95rem;
+  }
+
+  .row-cta {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--color-purple);
+  }
+
+  .row:hover .row-cta {
+    text-decoration: underline;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .row-img { transition: none; }
+    .row:hover .row-img,
+    .row:focus-within .row-img { transform: rotate(-1.5deg); }
+  }
+</style>

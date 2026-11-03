@@ -1,14 +1,15 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
+/* ============================================================
+   AboutSection.astro — "About me", shown on the homepage under
+   the hero. id="about" lets links jump straight to it
+   (the scroll arrow, and the old /about address).
+   ============================================================ */
 ---
 
-<BaseLayout
-  title="About — Paulina Cywoniuk"
-  description="About Paulina Cywoniuk: designer, VR researcher, and game technology master's student."
->
-  <section class="about">
-    <h1 class="about-title">About</h1>
+<section id="about" class="about">
+  <h2 class="about-title">About me</h2>
 
+  <div class="about-body">
     <div class="about-content">
       <p>
         I come from Poland and I'm currently based in <strong>Delft, the Netherlands</strong>.
@@ -34,23 +35,33 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     </div>
 
     <div class="about-cta">
-     <a href={`/portfolio`.replace('//', '/')} class="btn btn-primary">See my work →</a>
-<a href={`/contact`.replace('//', '/')} class="btn btn-ghost">Get in touch</a>
+      <a href="/portfolio" class="btn btn-primary">See my work →</a>
+      <a href="/contact" class="btn btn-ghost">Get in touch</a>
     </div>
-  </section>
-</BaseLayout>
+  </div>
+</section>
 
 <style>
   .about {
-    max-width: 720px;
+    max-width: var(--max-width);
     margin: 0 auto;
-    padding: clamp(3rem, 8vh, 5rem) var(--space-page);
+    padding: clamp(4rem, 10vw, 7rem) var(--space-page);
+    display: flex;
+    flex-wrap: wrap;                       /* heading on top on phones */
+    gap: 1.5rem clamp(2rem, 6vw, 5rem);
+    scroll-margin-top: 1rem;               /* a little space above when jumped to */
   }
 
   .about-title {
+    flex: 1 1 14rem;                       /* KNOB: width of the heading column */
     font-size: clamp(2.5rem, 6vw, 4rem);
+    line-height: 1;
     color: var(--color-purple);
-    margin-bottom: 2.5rem;
+  }
+
+  .about-body {
+    flex: 2.5 1 26rem;
+    max-width: 44rem;                      /* comfortable line length for reading */
   }
 
   .about-content p {
@@ -75,14 +86,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
-    margin-top: 3rem;
+    margin-top: 2rem;
   }
 
   .btn {
     padding: 0.85rem 1.5rem;
     border-radius: 999px;
     font-weight: 500;
-    font-size: 0.95rem;
+    font-size: 1rem;
     transition: transform 0.15s ease, background-color 0.2s ease;
     display: inline-block;
   }
@@ -91,22 +102,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   .btn-primary {
     background-color: var(--color-purple);
-    color: white;
+    color: var(--color-bg);
   }
 
   .btn-primary:hover {
     background-color: var(--color-blue);
-    color: white;
+    color: var(--color-bg);
   }
 
   .btn-ghost {
     background-color: transparent;
-    color: var(--color-text);
-    border: 1.5px solid var(--color-text);
+    color: var(--color-purple);
+    border: 1.5px solid var(--color-purple);
   }
 
   .btn-ghost:hover {
-    background-color: var(--color-text);
+    background-color: var(--color-purple);
     color: var(--color-bg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+    .btn:hover { transform: none; }
   }
 </style>

@@ -4,8 +4,8 @@
    ============================================ */
 
 /* Import fonts from Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&family=Gowun+Dodum&display=swap');:root {
-  /* Colors */
+@import url('https://fonts.googleapis.com/css2?family=Gabarito:wght@400..900&family=Gowun+Dodum&family=Caveat:wght@600&display=swap');
+:root {  /* Colors */
   --color-cyan: #f4b120;
   --color-orange: #F39237;
   --color-blue: #1789FC;

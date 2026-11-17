@@ -111,9 +111,27 @@ import CompareSlider from '../../components/project/CompareSlider.astro';
         </figure>
       </div>
 
-      [Two sentences about the seasonal buildings.]
+      <p> Additionally to creating assets that match the existing style, I was able to design skins for various in game events. The seasonal skins allowed us to give the game world a fresh look for each event while maintaining consistency with the overall art direction.</p>
     </MyPart>
 
   </Fragment>
 
 </ProjectPage>
+<style>
+  /* The two seasonal-skin sliders, stacked */
+  .skin-sliders {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(3.5rem, 8vw, 6rem);        /* KNOB: space between the two sliders */
+  }
+
+  .skin-slider {
+    margin: 0;
+  }
+
+  .skin-slider figcaption {
+    margin-top: 0.75rem;                  /* KNOB: space between slider and its caption */
+    font-size: 1rem;
+    color: var(--color-text-muted);
+  }
+</style>

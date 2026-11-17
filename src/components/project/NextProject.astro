@@ -1,0 +1,166 @@
+---
+/* ============================================================
+   NextProject.astro — the bottom of every project page:
+   a big "Next project" link, plus a small "All projects" link.
+
+   On hover, the next project's logo appears as a sticker that
+   follows the cursor. It works out the next project by itself,
+   from the page's own address and the list in
+   src/data/projects.js, so you never have to set it per page.
+   ============================================================ */
+import { projectOrder } from '../../data/projects.js';
+
+// The address of the page we're on, without a trailing slash
+const here = Astro.url.pathname.replace(/\/$/, '');
+const i = projectOrder.findIndex((p) => p.href === here);
+
+// The one after it; after the last project, loop back to the first
+const next = projectOrder[(i + 1) % projectOrder.length];
+---
+
+<nav class="next-nav" aria-label="More projects">
+  <a href={next.href} class="next-link" data-next-link>
+    <span class="next-label">Next project</span>
+    <span class="next-title">{next.title} <span aria-hidden="true">→</span></span>
+
+    <!-- The sticker that follows the cursor (decoration only) -->
+    <span class:list={['next-sticker', { 'next-sticker--cover': next.logoCover }]} aria-hidden="true">
+      <img src={next.logo} alt="" />
+    </span>
+  </a>
+
+  <a href="/portfolio" class="all-link">← All projects</a>
+</nav>
+
+<script>
+  // While the cursor moves over the link, store its position as two
+  // CSS variables (--x, --y). The CSS below places the sticker there.
+  document.querySelectorAll<HTMLElement>('[data-next-link]').forEach((link) => {
+    link.addEventListener('pointermove', (event) => {
+      const box = link.getBoundingClientRect();
+      link.style.setProperty('--x', `${event.clientX - box.left}px`);
+      link.style.setProperty('--y', `${event.clientY - box.top}px`);
+    });
+  });
+</script>
+
+<style>
+  .next-nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1.5rem 3rem;
+    padding-top: clamp(2.5rem, 6vw, 4rem);
+    border-top: 1.5px solid rgba(128, 35, 146, 0.3);   /* KNOB: divider line above */
+  }
+
+  /* ---------- The big "Next project" link ---------- */
+  .next-link {
+    position: relative;                  /* the sticker is placed inside this box */
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.5rem 0;
+    text-decoration: none;
+    --x: 60%;                            /* sticker start position, before the cursor moves */
+    --y: 0%;
+  }
+
+  .next-label {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+  }
+
+  .next-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.75rem, 4vw, 2.75rem);   /* KNOB: title size */
+    line-height: 1.1;
+    color: var(--color-purple);
+  }
+
+  .next-link:hover .next-title,
+  .next-link:focus-visible .next-title {
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  .next-link:focus-visible {
+    outline: 3px solid var(--color-blue);
+    outline-offset: 6px;
+    border-radius: 8px;
+  }
+
+  /* ---------- The logo sticker ---------- */
+  .next-sticker {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    width: 5.5rem;                       /* KNOB: sticker size */
+    height: 5.5rem;
+    padding: 0.7rem;
+    box-sizing: border-box;
+    border-radius: 16px;
+    background: var(--color-bg);
+    border: 2px solid var(--color-purple);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;                /* never gets in the way of the click */
+    opacity: 0;
+    /* up and to the right of the cursor, slightly tilted */
+    transform: translate(1.25rem, -125%) rotate(-6deg) scale(0.8);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .next-sticker img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  /* square logos with their own background (NL12) fill the sticker */
+  .next-sticker--cover {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .next-sticker--cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Show it only on devices with a mouse or trackpad.
+     On phones there's no hover, so the title is the link. */
+  @media (hover: hover) {
+    .next-link:hover .next-sticker {
+      opacity: 1;
+      transform: translate(1.25rem, -125%) rotate(-6deg) scale(1);
+    }
+  }
+
+  /* Reduced motion: the sticker still appears, but doesn't
+     follow the cursor or animate */
+  @media (prefers-reduced-motion: reduce) {
+    .next-sticker {
+      left: auto;
+      right: -1rem;
+      top: -1rem;
+      transform: rotate(-6deg);
+      transition: none;
+    }
+    .next-link:hover .next-sticker {
+      transform: rotate(-6deg);
+    }
+  }
+
+  /* ---------- The small "All projects" link ---------- */
+  .all-link {
+    font-size: 1rem;
+    color: var(--color-blue);
+    padding: 0.5rem 0;
+  }
+</style>

@@ -59,9 +59,11 @@ import CompareSlider from '../../components/project/CompareSlider.astro';
             bigAlt="Illustrated magical plants and trees"
       bigFit="contain"
             smallSrc="/portfolio/craftiplays/craftiplays-gui-pack.jpg"
+            bigCaption="Study of the shapes to create flora assets."
       smallAlt="Preview of the GUI asset pack The Stone, the style my illustrations had to match"
       smallHref="https://assetstore.unity.com/packages/2d/gui/gui-the-stone-116852"
       smallCredit="Asset pack: GUI The Stone (not my work)"
+      smallCaption="Original asset pack that I had to match."
       heading="Matching an existing style"
     >
       Every new asset design had to fit the style of an asset pack the team had already bought before I joined.
@@ -80,16 +82,35 @@ import CompareSlider from '../../components/project/CompareSlider.astro';
       bCaption="Process of designing the Green Eye event currency."
     />
 
-        <MyPart heading="Seasonal skins">
-      <CompareSlider
-        slot="main"
-        beforeSrc="/portfolio/craftiplays/craftiplays-skins-lake.jpg"
-        beforeAlt="Golden Lake building in normal, summer and Halloween skins"
-        beforeLabel="Golden Lake"
-        afterSrc="/portfolio/craftiplays/craftiplays-skins-shop.jpg"
-        afterAlt="Witch Shop building in normal, summer and Halloween skins"
-        afterLabel="Witch Shop"
-      />
+    <MyPart heading="Seasonal skins">
+      <!-- Two sliders, one per building. The wrapper takes the
+           "main" spot of MyPart, so both sit where its big image would. -->
+      <div slot="main" class="skin-sliders">
+        <figure class="skin-slider">
+          <CompareSlider
+            beforeSrc="/portfolio/craftiplays/craftiplays-shop-normal.jpg"
+            beforeAlt="Witch Shop building in its normal skin"
+            beforeLabel="Normal"
+            afterSrc="/portfolio/craftiplays/craftiplays-shop-halloween.jpg"
+            afterAlt="Witch Shop building in its Halloween skin"
+            afterLabel="Halloween"
+          />
+          <figcaption>Witch Shop: normal and Halloween skin.</figcaption>
+        </figure>
+
+        <figure class="skin-slider">
+          <CompareSlider
+            beforeSrc="/portfolio/craftiplays/craftiplays-lake-normal.jpg"
+            beforeAlt="Golden Lake building in its normal skin"
+            beforeLabel="Normal"
+            afterSrc="/portfolio/craftiplays/craftiplays-lake-summer.jpg"
+            afterAlt="Golden Lake building in its summer skin"
+            afterLabel="Summer"
+          />
+          <figcaption>Golden Lake: normal and summer skin.</figcaption>
+        </figure>
+      </div>
+
       [Two sentences about the seasonal buildings.]
     </MyPart>
 

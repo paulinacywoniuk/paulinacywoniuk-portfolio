@@ -14,6 +14,10 @@
 
    reverse={true} puts the big image on the RIGHT instead.
 
+   CAPTIONS (optional), like in the other modules:
+     bigCaption="..."    → under the big image
+     smallCaption="..."  → under the small image
+
    SMALL IMAGE AS A LINK (optional) — e.g. to credit someone else's
    work shown in the small spot:
      smallHref="https://..."          → clicking the image opens it in a new tab
@@ -36,7 +40,9 @@
    ============================================================ */
 const {
   bigSrc, bigAlt = '',
+  bigCaption,                             // optional: caption under the big image
   smallSrc, smallAlt = '',
+  smallCaption,                           // optional: caption under the small image
   smallHref,                              // optional: makes the small image a link
   smallCredit,                            // optional: visible label on the small image
   smallRatio = '4 / 3',                   // KNOB: small image shape ('auto' = its own shape)
@@ -61,6 +67,8 @@ const {
     <div class="big placeholder">[{bigAlt}]</div>
   )}
 
+  {bigCaption && <p class="big-caption">{bigCaption}</p>}
+
   <div class="side">
     {smallSrc && smallHref ? (
       <!-- Linked version: opens in a new tab. rel="noopener" is a
@@ -76,6 +84,8 @@ const {
       <div class="small placeholder">[{smallAlt}]</div>
     )}
 
+    {smallCaption && <p class="small-caption">{smallCaption}</p>}
+
     <div class:list={['tile-wrap', `tile-wrap--${tileStyle}`]}>
       <!-- Decoration only: circles behind the glass -->
       <div class="tile-circles" aria-hidden="true"></div>
@@ -89,19 +99,52 @@ const {
 </section>
 
 <style>
-  /* A row that wraps: on phones the side column drops below */
+  /* ============================================================
+     LAYOUT — a small grid with two columns and two rows:
+
+       "big     side"      ← big image | small image + tile
+       "bigcap  .   "      ← caption under the big image
+
+     The big image and the side column share row 1, so the image
+     still ends exactly where the tile ends. Its caption gets its
+     own row below, so it never pushes the image up.
+     ============================================================ */
   .big-small {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;                         /* KNOB: space between the pieces */
+    display: grid;
+    grid-template-columns: minmax(0, 11fr) minmax(0, 6fr);   /* KNOB: big vs side width */
+    grid-template-areas:
+      "big    side"
+      "bigcap .";
+    column-gap: 1.5rem;                  /* KNOB: space between big image and side */
+    row-gap: 0.75rem;                    /* space between big image and its caption */
   }
 
   .big-small--reverse {
-    flex-direction: row-reverse;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 11fr);
+    grid-template-areas:
+      "side  big"
+      ".     bigcap";
+  }
+
+  /* Phones: one column. Big image, its caption, then the side. */
+  @media (max-width: 760px) {
+    .big-small,
+    .big-small--reverse {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        "big"
+        "bigcap"
+        "side";
+    }
+
+    .side {
+      margin-top: 0.75rem;               /* row gap is small; give the side a bit more air */
+    }
   }
 
   .big {
-    flex: 2 1 32rem;                     /* KNOB: first number = how much wider the big one is */
+    grid-area: big;
+    width: 100%;
     min-width: 0;
     min-height: 22rem;
     align-self: stretch;                 /* same height as the side column, so the
@@ -111,8 +154,25 @@ const {
     border-radius: 16px;
   }
 
+  /* ---------- Captions (same look as the other modules) ---------- */
+  .big-caption,
+  .small-caption {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: var(--color-text-muted);
+  }
+
+  .big-caption {
+    grid-area: bigcap;
+  }
+
+  .small-caption {
+    margin-top: -0.75rem;                /* sits closer to its image than the 1.5rem column gap */
+  }
+
   .side {
-    flex: 1 1 18rem;
+    grid-area: side;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;

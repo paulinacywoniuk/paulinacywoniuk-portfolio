@@ -24,6 +24,7 @@
    ============================================================ */
 
 import BaseLayout from './BaseLayout.astro';
+import NextProject from '../components/project/NextProject.astro';
 
 const {
   // --- Head / SEO ---
@@ -100,8 +101,8 @@ const {
       <slot name="gallery" />
     </div>
 
-    <!-- Back link -->
-    <a href="/portfolio" class="back-link">← Back to portfolio</a>
+       <!-- Next project + all projects -->
+    <NextProject />
 
   </article>
 </BaseLayout>

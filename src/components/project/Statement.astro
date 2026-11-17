@@ -50,15 +50,18 @@ const {
     clip-path: inset(0 -100vmax);
   }
 
-  .statement-text {
-    max-width: calc(var(--max-width) - 2 * var(--space-page));                         /* KNOB: line length */
+     .statement-text {
+    /* Same width as the page column, so the text lines up with
+       the edges of your images. */
+    max-width: calc(var(--max-width) - 2 * var(--space-page));
     margin: 0 auto;
     font-family: var(--font-display);
-    font-weight: 800;
-    font-size: clamp(2rem, 5vw, 3.5rem);      /* KNOB: sentence size */
-    line-height: 1.08;
-    letter-spacing: -0.02em;
+    font-weight: 500;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);   /* KNOB: sentence size */
+    line-height: 1.3;
+    letter-spacing: 0;
     text-align: center;
+    text-wrap: balance;                       /* no orphans: splits lines evenly */
     color: var(--band-text);
   }
 
@@ -72,16 +75,10 @@ const {
      hard edges on purpose: where they stick out they stay crisp,
      behind the glass they turn soft. That contrast reads as glass.
      ============================================================ */
-  .statement--glass {
+    .statement--glass {
     position: relative;
-
-    /* FULL WIDTH: pull the block out to the window edges.
-       (The box-shadow trick of the solid band can't carry circles,
-       so this one uses negative margins instead.) */
     margin-inline: calc(50% - 50vw);
-
-    /* Room above and below the glass for the circles to peek out */
-    padding-block: clamp(2rem, 4vw, 3rem);              /* KNOB: how much they peek */
+    padding-block: 0;     /* was clamp(2rem, 4vw, 3rem): the room where the circles stuck out */
   }
 
   /* With some mouse/scrollbar setups 100vw is a few px wider than
@@ -113,6 +110,7 @@ const {
     -webkit-backdrop-filter: blur(22px) saturate(1.3);  /* Safari needs this prefix */
     backdrop-filter: blur(22px) saturate(1.3);          /* KNOB: blur amount */
     border-block: 2px solid rgba(128, 35, 146, 0.6);    /* KNOB: top + bottom edge, your purple at 60% */
+      padding: clamp(3rem, 6vw, 4.5rem) var(--space-page);   /* KNOB: band height (was up to 7rem) */
   }
 
   .statement--glass .statement-text {
